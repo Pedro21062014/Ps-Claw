@@ -1,137 +1,149 @@
-# PS Claw - Lightweight Fork of OpenClaw
+# PS Claw 🦞
 
-**PS Claw** is a lightweight fork of [OpenClaw](https://github.com/openclaw/openclaw), the personal AI assistant gateway. It strips away unnecessary components to deliver a lean, focused experience with only the essential channels and providers.
+**PS Claw** é uma versão leve do [OpenClaw](https://github.com/openclaw/openclaw) — agente de IA autônomo multi-canal com interface web estilo ChatGPT.
 
-## What Makes PS Claw Lighter
+Fork enxuto com foco em leveza e facilidade de uso, sem apps mobile, geração de mídia pesada ou componentes desnecessários.
 
-PS Claw removes significant bulk from the original OpenClaw codebase (~265MB down to a fraction), making it faster to clone, install, and deploy.
+---
 
-### Removed Directories
+## ⚡ Instalação rápida
 
-| Directory | Size | Reason |
-|-----------|------|--------|
-| `apps/` | ~17MB | Mobile/desktop apps (iOS, Android, macOS) |
-| `docs/` | ~15MB | Documentation (use upstream docs) |
-| `scripts/` | ~7.4MB | Build/deploy scripts |
-| `ui/` | ~7.1MB | Control UI |
-| `test/` | ~4.4MB | Test suites |
-| `deploy/` | - | Deployment configs |
-| `security/` | - | Security policies |
-| `qa/` | - | QA tooling |
-| `patches/` | - | Patch files |
-| `git-hooks/` | - | Git hook scripts |
-| `skills/` | - | Bundled skills |
-| `config/` | - | Config templates |
-| `.github/` | - | CI/CD workflows |
-| `.agents/` | - | Agent configs |
+### Requisitos
+- [Node.js](https://nodejs.org/) v22.19 ou superior
+- [pnpm](https://pnpm.io/) ou npm
 
-### Removed Files
-
-- `CHANGELOG.md` (2.4MB)
-- `SECURITY.md`, `CONTRIBUTING.md`, `AGENTS.md`, `VISION.md`
-- `Dockerfile`, `docker-compose.yml`
-- `appcast.xml`, `fly.toml`, `render.yaml`
-- Various lint/format/deploy configs
-
-### Removed Extensions (134 out of 141)
-
-Only 7 essential extensions are kept:
-
-| Extension | Type | Purpose |
-|-----------|------|---------|
-| `discord/` | Channel | Primary messaging channel |
-| `anthropic/` | LLM Provider | Claude models |
-| `deepseek/` | LLM Provider | DeepSeek models |
-| `openai/` | LLM Provider | GPT models |
-| `browser/` | Tool | Web browsing |
-| `brave/` | Tool | Web search |
-| `duckduckgo/` | Tool | Alternative web search |
-
-### Removed Test Files
-
-All `*.test.ts` and `*.spec.ts` files removed from `src/`, `packages/`, and `extensions/`.
-
-## What's Kept
-
-- **`src/`** - Core gateway functionality
-- **`packages/`** - Core libraries (agent-core, llm-core, plugin-sdk, etc.)
-- **7 essential extensions** - Discord + key LLM providers + web tools
-- **Build config** - tsconfig, tsdown, vitest, pnpm workspace
-- **Entry point** - `ps-claw.mjs` (renamed from `openclaw.mjs`)
-
-## Setup
-
-### Prerequisites
-
-- Node.js 22.19+ (Node 24 recommended)
-- pnpm
-
-### Install from Source
+### 1. Clonar o repositório
 
 ```bash
-git clone <your-repo-url>/ps-claw.git
-cd ps-claw
-
-pnpm install
-pnpm build
+git clone https://github.com/Pedro21062014/ps-claw-v2.git
+cd ps-claw-v2
 ```
 
-### Configure
+### 2. Instalar dependências
 
-1. Copy `.env.example` to `.env` and fill in your API keys:
+```bash
+npm install
+```
+
+### 3. Configurar
 
 ```bash
 cp .env.example .env
+# Edite o .env com sua chave de API
 ```
 
-2. Set at least one LLM provider key:
-   - `ANTHROPIC_API_KEY` for Claude
-   - `OPENAI_API_KEY` for GPT
-   - `DEEPSEEK_API_KEY` for DeepSeek
-
-3. Set your Discord bot token:
-   - `DISCORD_BOT_TOKEN`
-
-4. Create config at `~/.ps-claw/ps-claw.json`:
-
-```json
-{
-  "agent": {
-    "model": "anthropic/claude-sonnet-4-20250514"
-  }
-}
-```
-
-### Run
+### 4. Iniciar o PS Claw
 
 ```bash
-# Foreground mode
-pnpm ps-claw gateway --port 18789 --verbose
-
-# Or after global install
-ps-claw gateway --port 18789 --verbose
+node openclaw.mjs
 ```
 
-## Environment Variables
+### 5. Abrir a interface web
 
-PS Claw uses `PS_CLAW_` prefixed environment variables instead of `OPENCLAW_`:
+Em outro terminal:
 
-| Variable | Purpose |
-|----------|---------|
-| `PS_CLAW_GATEWAY_TOKEN` | Gateway authentication token |
-| `PS_CLAW_HOME` | Home directory override |
-| `PS_CLAW_STATE_DIR` | State directory override |
-| `PS_CLAW_CONFIG_PATH` | Config file path override |
+```bash
+node web-ui/server.mjs
+```
 
-Provider keys remain unchanged (e.g., `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`).
+Acesse **http://localhost:3000** no navegador e aproveite a interface! 🎉
 
-## Credits
+---
 
-PS Claw is a lightweight fork of [OpenClaw](https://github.com/openclaw/openclaw) by Peter Steinberger and the OpenClaw community. All core functionality, architecture, and the plugin SDK are the work of the original OpenClaw project.
+## 🌐 Interface Web
 
-- Upstream: [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw)
-- License: MIT (same as OpenClaw)
+O PS Claw vem com uma interface estilo ChatGPT embutida. Para usar:
 
-## License
+```bash
+# Terminal 1 — inicia o agente
+node openclaw.mjs
 
-MIT - See [LICENSE](LICENSE) for details.
+# Terminal 2 — inicia a interface web
+node web-ui/server.mjs
+```
+
+Depois acesse: **http://localhost:3000**
+
+### Funcionalidades da interface
+- 💬 Chat com o agente em tempo real
+- 🗂️ Histórico de conversas salvo localmente
+- 🔄 Troca de modelo (Claude, GPT-4o, Gemini...)
+- ⚙️ Painel de configurações
+- 📱 Responsivo para mobile
+
+### Variáveis de ambiente da interface
+
+```bash
+PS_CLAW_WEB_PORT=3000       # Porta da interface (padrão: 3000)
+PS_CLAW_GATEWAY_PORT=18789  # Porta do gateway PS Claw (padrão: 18789)
+```
+
+---
+
+## 🔄 Atualizar o PS Claw
+
+Para atualizar para a versão mais recente, execute o script de atualização:
+
+**Linux / macOS:**
+```bash
+bash update.sh
+```
+
+**Windows (Git Bash ou WSL):**
+```bash
+bash update.sh
+```
+
+O script vai:
+1. Verificar se há uma versão nova disponível
+2. Baixar as atualizações do GitHub
+3. Reinstalar dependências se necessário
+4. Mostrar o que mudou
+
+---
+
+## ✅ O que está incluído
+
+| Recurso | Status |
+|---|---|
+| Core do agente autônomo | ✅ |
+| Telegram, Discord, WhatsApp | ✅ |
+| Busca na web | ✅ |
+| Suporte a MCP / Skills | ✅ |
+| Memória persistente | ✅ |
+| Interface web estilo ChatGPT | ✅ |
+| CLI e Docker | ✅ |
+| Apps iOS / Android / macOS | ❌ removido |
+| Geração de vídeo / música / imagem | ❌ removido |
+| Transcrição em tempo real / TTS | ❌ removido |
+
+---
+
+## 🐳 Docker
+
+```bash
+docker-compose up
+```
+
+---
+
+## 📁 Estrutura
+
+```
+ps-claw-v2/
+├── openclaw.mjs      ← Binário principal do agente
+├── update.sh         ← Script de atualização
+├── web-ui/
+│   ├── server.mjs    ← Servidor da interface web
+│   └── public/
+│       └── index.html ← Interface estilo ChatGPT
+├── src/              ← Código-fonte do agente
+├── .env.example      ← Exemplo de configuração
+└── package.json
+```
+
+---
+
+## 📄 Licença
+
+MIT — baseado no [OpenClaw](https://github.com/openclaw/openclaw) por Peter Steinberger e contribuidores.
