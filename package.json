@@ -1613,7 +1613,7 @@
     "postinstall": "echo 'Skipping postinstall'",
     "postpack": "echo 'Skipping postpack'",
     "preinstall": "echo 'Skipping preinstall'",
-    "prepack": "node scripts/build-all.mjs",
+    "prepack": "echo 'Skipping prepack — dist/ already included in files'",
     "prepare": "echo 'Skipping prepare'",
     "prepush:ci": "bash scripts/prepush-ci.sh",
     "probe:anthropic:prompt": "node --import tsx scripts/anthropic-prompt-probe.ts",
