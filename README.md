@@ -10,95 +10,100 @@ Fork enxuto com foco em leveza e facilidade de uso, sem apps mobile, geração d
 
 ### Requisitos
 - [Node.js](https://nodejs.org/) v22.19 ou superior
-- [pnpm](https://pnpm.io/) ou npm
 
-### 1. Clonar o repositório
-
-```bash
-git clone https://github.com/Pedro21062014/ps-claw-v2.git
-cd ps-claw-v2
-```
-
-### 2. Instalar dependências
+### Instalar via npm (recomendado)
 
 ```bash
-npm install
+npm i ps-claw
 ```
 
-### 3. Configurar
+Pronto! O comando `ps-claw` fica disponível globalmente se instalado com `-g`:
 
 ```bash
-cp .env.example .env
-# Edite o .env com sua chave de API
+npm i -g ps-claw
 ```
 
-### 4. Iniciar o PS Claw
+### Instalar via npx (sem instalar)
 
 ```bash
-node openclaw.mjs
+npx ps-claw --help
 ```
 
-### 5. Abrir a interface web
-
-Em outro terminal:
+### Instalar a partir do código-fonte
 
 ```bash
-node web-ui/server.mjs
+git clone https://github.com/Pedro21062014/Ps-Claw.git
+cd Ps-Claw
+pnpm install
+pnpm build
 ```
-
-Acesse **http://localhost:3000** no navegador e aproveite a interface! 🎉
 
 ---
 
-## 🌐 Interface Web
+## 🚀 Usando o PS Claw
 
-O PS Claw vem com uma interface estilo ChatGPT embutida. Para usar:
+### CLI — Linha de comando
 
-```bash
-# Terminal 1 — inicia o agente
-node openclaw.mjs
-
-# Terminal 2 — inicia a interface web
-node web-ui/server.mjs
-```
-
-Depois acesse: **http://localhost:3000**
-
-### Funcionalidades da interface
-- 💬 Chat com o agente em tempo real
-- 🗂️ Histórico de conversas salvo localmente
-- 🔄 Troca de modelo (Claude, GPT-4o, Gemini...)
-- ⚙️ Painel de configurações
-- 📱 Responsivo para mobile
-
-### Variáveis de ambiente da interface
+Após instalar com `npm i -g ps-claw`:
 
 ```bash
-PS_CLAW_WEB_PORT=3000       # Porta da interface (padrão: 3000)
-PS_CLAW_GATEWAY_PORT=18789  # Porta do gateway PS Claw (padrão: 18789)
+ps-claw --help           # Mostra todos os comandos
+ps-claw --version        # Versão instalada
+ps-claw web              # Inicia a interface web
+ps-claw gateway run      # Inicia o gateway
+ps-claw gateway status   # Verifica status do gateway
+ps-claw doctor           # Diagnóstico do sistema
+ps-claw models list      # Lista modelos disponíveis
+ps-claw secrets set openai    # Configura chave OpenAI
+ps-claw secrets set anthropic # Configura chave Anthropic
+ps-claw configure        # Configuração interativa
 ```
+
+### Interface Web
+
+```bash
+ps-claw web
+```
+
+Acesse **http://localhost:3000** no navegador.
+
+A interface web tem 4 abas:
+- 💬 **Chat** — conversas com histórico salvo localmente
+- 🔗 **Gateways** — conectar e gerenciar APIs (OpenAI, Anthropic, Ollama, LM Studio, etc.)
+- 🧠 **Modelos** — selecionar modelos por provedor (GPT-4o, Claude Opus 4.5, Gemini 2.5 Pro, DeepSeek...)
+- ⚙️ **Config** — temperatura, max tokens, system prompt, chaves de API, export/import de configurações
+
+### Variáveis de ambiente
+
+```bash
+PS_CLAW_WEB_PORT=3000              # Porta da interface web (padrão: 3000)
+PS_CLAW_GATEWAY_PORT=18789         # Porta do gateway (padrão: 18789)
+OPENCLAW_GATEWAY_TOKEN=            # Token de autenticação do gateway
+OPENAI_API_KEY=sk-...              # Chave OpenAI
+ANTHROPIC_API_KEY=sk-ant-...       # Chave Anthropic
+GEMINI_API_KEY=...                 # Chave Google/Gemini
+DEEPSEEK_API_KEY=sk-...            # Chave DeepSeek
+OPENROUTER_API_KEY=sk-or-...       # Chave OpenRouter
+```
+
+Ou configure as chaves na aba **Config** da interface web.
 
 ---
 
 ## 🔄 Atualizar o PS Claw
 
-Para atualizar para a versão mais recente, execute o script de atualização:
-
-**Linux / macOS:**
 ```bash
-bash update.sh
+npm update -g ps-claw
 ```
 
-**Windows (Git Bash ou WSL):**
-```bash
-bash update.sh
-```
+Ou se instalou via código-fonte:
 
-O script vai:
-1. Verificar se há uma versão nova disponível
-2. Baixar as atualizações do GitHub
-3. Reinstalar dependências se necessário
-4. Mostrar o que mudou
+```bash
+cd Ps-Claw
+git pull
+pnpm install
+pnpm build
+```
 
 ---
 
@@ -107,12 +112,14 @@ O script vai:
 | Recurso | Status |
 |---|---|
 | Core do agente autônomo | ✅ |
-| Telegram, Discord, WhatsApp | ✅ |
-| Busca na web | ✅ |
+| Provedores: OpenAI, Anthropic, Google, DeepSeek, OpenRouter | ✅ |
+| Interface web com gateways, modelos e configurações | ✅ |
+| CLI com comandos completos | ✅ |
+| Pacote npm publicado | ✅ |
+| Busca na web (DuckDuckGo, Brave) | ✅ |
 | Suporte a MCP / Skills | ✅ |
 | Memória persistente | ✅ |
-| Interface web estilo ChatGPT | ✅ |
-| CLI e Docker | ✅ |
+| Docker | ✅ |
 | Apps iOS / Android / macOS | ❌ removido |
 | Geração de vídeo / música / imagem | ❌ removido |
 | Transcrição em tempo real / TTS | ❌ removido |
@@ -130,16 +137,29 @@ docker-compose up
 ## 📁 Estrutura
 
 ```
-ps-claw-v2/
-├── openclaw.mjs      ← Binário principal do agente
-├── update.sh         ← Script de atualização
+Ps-Claw/
+├── ps-claw.mjs        ← Binário CLI principal
+├── scripts/
+│   └── build-all.mjs  ← Script de build
 ├── web-ui/
-│   ├── server.mjs    ← Servidor da interface web
+│   ├── server.mjs     ← Servidor da interface web
 │   └── public/
-│       └── index.html ← Interface estilo ChatGPT
-├── src/              ← Código-fonte do agente
-├── .env.example      ← Exemplo de configuração
+│       └── index.html ← Interface web (Chat, Gateways, Modelos, Config)
+├── src/               ← Código-fonte TypeScript
+├── extensions/        ← Provedores (OpenAI, Anthropic, DeepSeek...)
+├── packages/          ← Bibliotecas internas
+├── .env.example       ← Exemplo de configuração
 └── package.json
+```
+
+---
+
+## 📦 npm
+
+Disponível em: [https://www.npmjs.com/package/ps-claw](https://www.npmjs.com/package/ps-claw)
+
+```bash
+npm i ps-claw
 ```
 
 ---
