@@ -4,43 +4,37 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org/
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Check version vs npm
-        id: check
+      - name: Get version info
+        id: version
         run: |
           LOCAL=$(node -p "require('./package.json').version")
           REMOTE=$(npm view ps-claw version 2>/dev/null || echo "0.0.0")
-          echo "Local: $LOCAL | npm: $REMOTE"
-          if [ "$LOCAL" != "$REMOTE" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+          echo "local=$LOCAL" >> $GITHUB_OUTPUT
+          echo "remote=$REMOTE" >> $GITHUB_OUTPUT
+          echo "📦 Local: v$LOCAL | npm: v$REMOTE"
 
       - name: Publish to npm
-        if: steps.check.outputs.changed == 'true'
+        if: steps.version.outputs.local != steps.version.outputs.remote
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Skip (already published)
-        if: steps.check.outputs.changed == 'false'
-        run: echo "✅ Version already on npm, skipping publish."
+      - name: Already published
+        if: steps.version.outputs.local == steps.version.outputs.remote
+        run: echo "✅ v${{ steps.version.outputs.local }} já publicado"
