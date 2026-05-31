@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * PS Claw CLI — ponto de entrada global
- * Uso: ps-claw [comando]
- * Comandos: start | web | all | update | help
+ * PS Claw CLI — standalone, sem dependência do dist/
  */
 
 import { spawn } from "node:child_process";
@@ -33,7 +31,7 @@ ${C.cyan}${C.bold}  ██████╔╝███████╗    ██�
 ${C.cyan}${C.bold}  ██╔═══╝ ╚════██║    ██║     ██║     ██╔══██║██║███╗██║${C.reset}
 ${C.cyan}${C.bold}  ██║     ███████║    ╚██████╗███████╗██║  ██║╚███╔███╔╝${C.reset}
 ${C.cyan}${C.bold}  ╚═╝     ╚══════╝     ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝${C.reset}
-  ${C.dim}v1.0.0 — Lightweight AI Agent Gateway${C.reset}
+  ${C.dim}v1.0.8 — Lightweight AI Agent Gateway${C.reset}
 `);
 }
 
@@ -41,79 +39,60 @@ function help() {
   banner();
   console.log(`  ${C.bold}Comandos:${C.reset}
 
-  ${C.green}ps-claw start${C.reset}       Inicia o agente PS Claw
-  ${C.green}ps-claw web${C.reset}         Inicia a interface web em http://localhost:3000
-  ${C.green}ps-claw all${C.reset}         Inicia o agente + interface web juntos
-  ${C.green}ps-claw update${C.reset}      Atualiza o PS Claw
-  ${C.green}ps-claw help${C.reset}        Esta mensagem
-
-  ${C.bold}Início rápido:${C.reset}
-
-  ${C.dim}# Via npm (global)${C.reset}
-  npm install -g ps-claw
-  ps-claw all
-
-  ${C.dim}# Via git clone${C.reset}
-  git clone https://github.com/Pedro21062014/ps-claw-v2.git
-  cd ps-claw-v2 && npm install
-  ps-claw all
+  ${C.green}npx ps-claw web${C.reset}       Abre a interface web em http://localhost:3000
+  ${C.green}npx ps-claw start${C.reset}     Inicia o agente PS Claw
+  ${C.green}npx ps-claw all${C.reset}       Inicia tudo junto
+  ${C.green}npx ps-claw update${C.reset}    Atualiza o PS Claw
+  ${C.green}npx ps-claw help${C.reset}      Esta mensagem
 
   ${C.bold}Interface web:${C.reset} http://localhost:3000
 `);
 }
 
-function run(file, extraArgs = []) {
-  if (!existsSync(file)) {
-    console.error(`${C.red}❌ Arquivo não encontrado: ${file}${C.reset}`);
+function startWeb() {
+  const srv = path.join(__dirname, "web-ui", "server.mjs");
+  if (!existsSync(srv)) {
+    console.error(`${C.red}❌ web-ui/server.mjs não encontrado!${C.reset}`);
     process.exit(1);
   }
-  const proc = spawn(process.execPath, [file, ...extraArgs], { stdio: "inherit" });
+  console.log(`${C.green}🌐 Iniciando Interface Web...${C.reset}`);
+  console.log(`${C.cyan}   Acesse: http://localhost:3000${C.reset}\n`);
+  const proc = spawn(process.execPath, [srv], { stdio: "inherit" });
   proc.on("exit", code => process.exit(code ?? 0));
-  return proc;
 }
 
 function startAgent() {
-  console.log(`${C.green}🦞 Iniciando PS Claw Agent...${C.reset}`);
-  run(path.join(__dirname, "ps-claw.mjs"), args.slice(1));
-}
+  // Usa o ps-claw.mjs original do OpenClaw se existir e tiver dist/
+  // Caso contrário, avisa o usuário e abre a web
+  const distEntry = path.join(__dirname, "dist", "entry.mjs");
+  const distEntryJs = path.join(__dirname, "dist", "entry.js");
 
-function startWeb() {
-  const srv = path.join(__dirname, "web-ui", "server.mjs");
-  console.log(`${C.green}🌐 Interface Web → http://localhost:3000${C.reset}`);
-  run(srv);
+  if (!existsSync(distEntry) && !existsSync(distEntryJs)) {
+    console.log(`${C.yellow}⚠️  O agente requer configuração adicional (dist/).${C.reset}`);
+    console.log(`${C.dim}   Para usar a interface web, execute: npx ps-claw web${C.reset}\n`);
+    console.log(`${C.green}🌐 Iniciando Interface Web automaticamente...${C.reset}`);
+    console.log(`${C.cyan}   Acesse: http://localhost:3000${C.reset}\n`);
+    startWeb();
+    return;
+  }
+
+  console.log(`${C.green}🦞 Iniciando PS Claw Agent...${C.reset}`);
+  const proc = spawn(process.execPath, [path.join(__dirname, "ps-claw.mjs"), ...args.slice(1)], { stdio: "inherit" });
+  proc.on("exit", code => process.exit(code ?? 0));
 }
 
 function startAll() {
   banner();
-  const agentFile = path.join(__dirname, "ps-claw.mjs");
-  const webFile   = path.join(__dirname, "web-ui", "server.mjs");
-
-  console.log(`${C.green}🦞 Iniciando PS Claw Agent...${C.reset}`);
-  const agent = spawn(process.execPath, [agentFile], { stdio: "inherit" });
-
-  setTimeout(() => {
-    if (existsSync(webFile)) {
-      console.log(`\n${C.cyan}🌐 Iniciando Interface Web → http://localhost:3000${C.reset}\n`);
-      const web = spawn(process.execPath, [webFile], { stdio: "inherit" });
-      web.on("exit", code => process.exit(code ?? 0));
-    }
-  }, 1500);
-
-  agent.on("exit", code => process.exit(code ?? 0));
-  process.on("SIGINT", () => { agent.kill(); process.exit(0); });
+  startWeb();
 }
 
 function update() {
-  banner();
-  const script = path.join(__dirname, "update.sh");
-  console.log(`${C.yellow}🔄 Verificando atualizações...${C.reset}\n`);
-  if (!existsSync(script)) {
-    console.log(`${C.yellow}Baixando versão mais recente...${C.reset}`);
-    run("git", ["pull"]);
-    return;
-  }
-  const proc = spawn("bash", [script], { stdio: "inherit" });
-  proc.on("exit", code => process.exit(code ?? 0));
+  console.log(`${C.yellow}🔄 Atualizando PS Claw...${C.reset}\n`);
+  const proc = spawn("npm", ["install", "-g", "ps-claw@latest"], { stdio: "inherit", shell: true });
+  proc.on("exit", code => {
+    if (code === 0) console.log(`\n${C.green}✅ PS Claw atualizado!${C.reset}`);
+    process.exit(code ?? 0);
+  });
 }
 
 switch (cmd) {
