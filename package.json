@@ -1,6 +1,6 @@
 {
   "name": "ps-claw",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "PS Claw - AI Agent Gateway with multi-provider support, web UI, and CLI. Lightweight fork of OpenClaw.",
   "keywords": [
     "ai",

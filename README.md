@@ -1,169 +1,300 @@
 # PS Claw 🦞
 
-**PS Claw** é uma versão leve do [OpenClaw](https://github.com/openclaw/openclaw) — agente de IA autônomo multi-canal com interface web estilo ChatGPT.
+**PS Claw** — Agente de IA autônomo leve com interface web estilo ChatGPT. Multi-canal (Telegram, Discord, WhatsApp) com suporte a modelos de múltiplos provedores (Claude, GPT-4, Gemini).
 
-Fork enxuto com foco em leveza e facilidade de uso, sem apps mobile, geração de mídia pesada ou componentes desnecessários.
+Fork enxuto do [OpenClaw](https://github.com/openclaw/openclaw) focado em leveza, facilidade de uso e sem dependências pesadas.
 
 ---
 
-## ⚡ Instalação rápida
+## ⚡ Início Rápido (5 minutos)
 
 ### Requisitos
-- [Node.js](https://nodejs.org/) v22.19 ou superior
+- [Node.js](https://nodejs.org/) **v22.19+** (baixe a versão LTS)
+- npm (incluído com Node.js)
 
-### Instalar via npm (recomendado)
-
-```bash
-npm i ps-claw
-```
-
-Pronto! O comando `ps-claw` fica disponível globalmente se instalado com `-g`:
+### 1️⃣ Instalar e executar
 
 ```bash
-npm i -g ps-claw
+npx ps-claw@latest web
 ```
 
-### Instalar via npx (sem instalar)
-
-```bash
-npx ps-claw --help
-```
-
-### Instalar a partir do código-fonte
-
-```bash
-git clone https://github.com/Pedro21062014/Ps-Claw.git
-cd Ps-Claw
-pnpm install
-pnpm build
-```
+Pronto! A interface web abre em **http://localhost:3000** 🎉
 
 ---
 
-## 🚀 Usando o PS Claw
+## 🌐 Interface Web
 
-### CLI — Linha de comando
+### O que é?
+Interface visual estilo ChatGPT para conversar com o agente de IA. Salva histórico no navegador, permite trocar modelos, configurar gateways.
 
-Após instalar com `npm i -g ps-claw`:
+### Como usar?
 
 ```bash
-ps-claw --help           # Mostra todos os comandos
-ps-claw --version        # Versão instalada
-ps-claw web              # Inicia a interface web
-ps-claw gateway run      # Inicia o gateway
-ps-claw gateway status   # Verifica status do gateway
-ps-claw doctor           # Diagnóstico do sistema
-ps-claw models list      # Lista modelos disponíveis
-ps-claw secrets set openai    # Configura chave OpenAI
-ps-claw secrets set anthropic # Configura chave Anthropic
-ps-claw configure        # Configuração interativa
+# Abrir a interface web
+npx ps-claw web
+
+# Ou executar tudo junto (agente + web)
+npx ps-claw all
 ```
 
-### Interface Web
+Acesse: **http://localhost:3000**
+
+### Configuração na interface
+
+1. Vá para a aba **🔌 Gateways**
+   - Clique **+ Adicionar**
+   - URL: `http://localhost:18789` (PS Claw local) ou qualquer API OpenAI-compatível
+   - Nome: "Meu Gateway"
+   - Clique **Adicionar**
+
+2. Vá para a aba **🤖 Modelos & Provedores**
+   - Adicione suas **chaves de API**:
+     - **Claude** (Anthropic): `sk-ant-...`
+     - **GPT-4** (OpenAI): `sk-...`
+     - **Gemini** (Google): `AIza...`
+     - **Mistral**: sua chave
+   - Selecione um modelo
+   - Clique no modelo para usá-lo
+
+3. Volte para **💬 Chat** e comece a conversar! 💬
+
+---
+
+## 🔑 Chaves de API — Como obter
+
+### 🟠 Anthropic (Claude)
+
+1. Acesse https://console.anthropic.com
+2. Faça login ou crie conta
+3. Vá para **API Keys**
+4. Clique **Create Key**
+5. Copie a chave `sk-ant-...`
+6. Cole na aba **Modelos** do PS Claw
+
+**Grátis?** Sim, Claude oferece créditos iniciais ($5-$20). Depois é por uso.
+
+### 🟢 OpenAI (GPT-4, GPT-4o)
+
+1. Acesse https://platform.openai.com
+2. Faça login ou crie conta
+3. Vá para **API Keys**
+4. Clique **Create new secret key**
+5. Copie a chave `sk-...`
+6. Cole na aba **Modelos** do PS Claw
+
+**Grátis?** Sim, trial de $5-$18. Depois é por uso (mais barato que Claude).
+
+### 🔵 Google (Gemini)
+
+1. Acesse https://aistudio.google.com/apikey
+2. Clique **Create API Key**
+3. Selecione um projeto ou crie novo
+4. Copie a chave `AIza...`
+5. Cole na aba **Modelos** do PS Claw
+
+**Grátis?** Sim, 60 chamadas por minuto para sempre.
+
+### 🟣 Mistral
+
+1. Acesse https://console.mistral.ai
+2. Faça login ou crie conta
+3. Vá para **API Keys**
+4. Clique **Generate a new key**
+5. Copie a chave
+6. Cole na aba **Modelos** do PS Claw
+
+**Grátis?** Sim, trial de crédito. Depois por uso.
+
+---
+
+## 🚀 Alternativas de Uso
+
+### Via Git Clone (desenvolvedores)
 
 ```bash
+git clone https://github.com/Pedro21062014/ps-claw-v2.git
+cd ps-claw-v2
+npm install
+npx ps-claw web
+```
+
+### Instalar Globalmente
+
+```bash
+npm install -g ps-claw@latest
 ps-claw web
 ```
 
-Acesse **http://localhost:3000** no navegador.
+Se não funcionar em Windows, use `npx ps-claw web` em vez disso.
 
-A interface web tem 4 abas:
-- 💬 **Chat** — conversas com histórico salvo localmente
-- 🔗 **Gateways** — conectar e gerenciar APIs (OpenAI, Anthropic, Ollama, LM Studio, etc.)
-- 🧠 **Modelos** — selecionar modelos por provedor (GPT-4o, Claude Opus 4.5, Gemini 2.5 Pro, DeepSeek...)
-- ⚙️ **Config** — temperatura, max tokens, system prompt, chaves de API, export/import de configurações
-
-### Variáveis de ambiente
+### Atualizar
 
 ```bash
-PS_CLAW_WEB_PORT=3000              # Porta da interface web (padrão: 3000)
-PS_CLAW_GATEWAY_PORT=18789         # Porta do gateway (padrão: 18789)
-OPENCLAW_GATEWAY_TOKEN=            # Token de autenticação do gateway
-OPENAI_API_KEY=sk-...              # Chave OpenAI
-ANTHROPIC_API_KEY=sk-ant-...       # Chave Anthropic
-GEMINI_API_KEY=...                 # Chave Google/Gemini
-DEEPSEEK_API_KEY=sk-...            # Chave DeepSeek
-OPENROUTER_API_KEY=sk-or-...       # Chave OpenRouter
-```
-
-Ou configure as chaves na aba **Config** da interface web.
-
----
-
-## 🔄 Atualizar o PS Claw
-
-```bash
-npm update -g ps-claw
-```
-
-Ou se instalou via código-fonte:
-
-```bash
-cd Ps-Claw
-git pull
-pnpm install
-pnpm build
+npx ps-claw update
+# ou
+npm install -g ps-claw@latest
 ```
 
 ---
 
-## ✅ O que está incluído
+## ⚙️ Configurações Avançadas
 
-| Recurso | Status |
-|---|---|
-| Core do agente autônomo | ✅ |
-| Provedores: OpenAI, Anthropic, Google, DeepSeek, OpenRouter | ✅ |
-| Interface web com gateways, modelos e configurações | ✅ |
-| CLI com comandos completos | ✅ |
-| Pacote npm publicado | ✅ |
-| Busca na web (DuckDuckGo, Brave) | ✅ |
-| Suporte a MCP / Skills | ✅ |
-| Memória persistente | ✅ |
-| Docker | ✅ |
-| Apps iOS / Android / macOS | ❌ removido |
-| Geração de vídeo / música / imagem | ❌ removido |
-| Transcrição em tempo real / TTS | ❌ removido |
+### Variáveis de Ambiente
+
+```bash
+# Porta da interface web (padrão: 3000)
+set PS_CLAW_WEB_PORT=3000
+
+# Porta do gateway PS Claw (padrão: 18789)
+set PS_CLAW_GATEWAY_PORT=18789
+
+# Token do gateway (se tiver autenticação)
+set OPENCLAW_GATEWAY_TOKEN=seu_token_aqui
+```
+
+### Usar outro Gateway
+
+Se você tem um PS Claw rodando em outro servidor:
+
+1. Na interface, aba **🔌 Gateways**
+2. Adicione a URL: `http://seu-servidor:18789`
+3. Pronto! Usa esse gateway
+
+### Usar API OpenAI-compatível
+
+Muitos serviços são compatíveis com OpenAI API:
+
+- **Ollama** (modelos locais): `http://localhost:11434`
+- **Vllm** (inference server): `http://localhost:8000`
+- **LiteLLM**: qualquer URL proxy
+
+Configure na aba **Gateways** com a URL do seu servidor.
+
+---
+
+## 📱 Canais (Telegram, Discord, WhatsApp)
+
+Você pode conectar o PS Claw a:
+
+- **Telegram** — Adicionar bot ao chat
+- **Discord** — Adicionar bot ao servidor
+- **WhatsApp** — Integração via Twilio ou Baileys
+- **Slack** — Bot em workspace
+
+Configure na interface ou edite `.env`:
+
+```bash
+# .env.example
+TELEGRAM_BOT_TOKEN=seu_token
+DISCORD_BOT_TOKEN=seu_token
+WHATSAPP_PHONE=seu_numero
+```
+
+Copie `.env.example` para `.env` e preencha.
 
 ---
 
 ## 🐳 Docker
 
 ```bash
-docker-compose up
+# Build
+docker build -t ps-claw .
+
+# Run
+docker run -p 3000:3000 ps-claw web
 ```
 
 ---
 
-## 📁 Estrutura
+## ✅ Recursos Incluídos
 
-```
-Ps-Claw/
-├── ps-claw.mjs        ← Binário CLI principal
-├── scripts/
-│   └── build-all.mjs  ← Script de build
-├── web-ui/
-│   ├── server.mjs     ← Servidor da interface web
-│   └── public/
-│       └── index.html ← Interface web (Chat, Gateways, Modelos, Config)
-├── src/               ← Código-fonte TypeScript
-├── extensions/        ← Provedores (OpenAI, Anthropic, DeepSeek...)
-├── packages/          ← Bibliotecas internas
-├── .env.example       ← Exemplo de configuração
-└── package.json
-```
+| Recurso | Status |
+|---------|--------|
+| Interface web estilo ChatGPT | ✅ |
+| Chat com histórico | ✅ |
+| Múltiplos modelos | ✅ |
+| Telegram, Discord, WhatsApp | ✅ |
+| Busca na web | ✅ |
+| Memória persistente | ✅ |
+| CLI + API | ✅ |
+| Suporte MCP/Skills | ✅ |
+| Apps iOS/Android | ❌ removido |
+| Geração de vídeo/música | ❌ removido |
+| Transcrição em tempo real | ❌ removido |
 
 ---
 
-## 📦 npm
+## 🆘 Resolução de Problemas
 
-Disponível em: [https://www.npmjs.com/package/ps-claw](https://www.npmjs.com/package/ps-claw)
+### "ps-claw: comando não encontrado"
+
+**Solução:** Use `npx ps-claw web` em vez de `ps-claw web`
+
+### "localhost:3000 recusou conexão"
+
+**Solução:** Verifique se algum programa já usa a porta 3000:
 
 ```bash
-npm i ps-claw
+# Windows
+netstat -ano | findstr :3000
+
+# Mac/Linux
+lsof -i :3000
 ```
+
+Se estiver em uso, mude a porta:
+
+```bash
+set PS_CLAW_WEB_PORT=3001
+npx ps-claw web
+```
+
+### "Gateway offline"
+
+**Solução:** Verifique se:
+
+1. A URL está correta (ex: `http://localhost:18789`)
+2. O gateway está rodando (se for local, execute `npx ps-claw start`)
+3. Firewall não está bloqueando
+
+### "Chave de API inválida"
+
+**Solução:**
+
+1. Copie a chave completa (sem espaços)
+2. Verifique se é uma chave válida (não expirou)
+3. Cole de novo na aba **Modelos**
+
+---
+
+## 📚 Documentação Completa
+
+- [OpenClaw (original)](https://github.com/openclaw/openclaw)
+- [Anthropic Claude](https://console.anthropic.com/docs)
+- [OpenAI API](https://platform.openai.com/docs)
+- [Google Gemini](https://aistudio.google.com/app/apikey)
 
 ---
 
 ## 📄 Licença
 
-MIT — baseado no [OpenClaw](https://github.com/openclaw/openclaw) por Peter Steinberger e contribuidores.
+MIT — Baseado no [OpenClaw](https://github.com/openclaw/openclaw) por Peter Steinberger
+
+---
+
+## 🤝 Contribuições
+
+Pull requests bem-vindo! Para mudanças grandes, abra uma issue primeiro.
+
+---
+
+## 💬 Suporte
+
+- GitHub Issues: https://github.com/Pedro21062014/ps-claw-v2/issues
+- Discussões: https://github.com/Pedro21062014/ps-claw-v2/discussions
+
+---
+
+**Aproveite o PS Claw! 🦞**
+
+Dúvidas? Abra uma issue no GitHub ou entre em contato! ✨
