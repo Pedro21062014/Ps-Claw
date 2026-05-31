@@ -1,8 +1,23 @@
 {
   "name": "ps-claw",
-  "version": "2026.5.30",
+  "version": "1.0.0",
   "description": "PS Claw - AI Agent Gateway with multi-provider support, web UI, and CLI. Lightweight fork of OpenClaw.",
-  "keywords": ["ai", "agent", "gateway", "chatgpt", "openai", "anthropic", "claude", "gemini", "deepseek", "llm", "ai-gateway", "chatbot", "cli", "web-ui"],
+  "keywords": [
+    "ai",
+    "agent",
+    "gateway",
+    "chatgpt",
+    "openai",
+    "anthropic",
+    "claude",
+    "gemini",
+    "deepseek",
+    "llm",
+    "ai-gateway",
+    "chatbot",
+    "cli",
+    "web-ui"
+  ],
   "homepage": "https://github.com/Pedro21062014/Ps-Claw#readme",
   "bugs": {
     "url": "https://github.com/Pedro21062014/Ps-Claw/issues"
@@ -18,13 +33,16 @@
     "registry": "https://registry.npmjs.org/"
   },
   "bin": {
-    "ps-claw": "ps-claw.mjs"
+    "ps-claw": "cli.mjs"
   },
   "directories": {
     "doc": "docs",
     "test": "test"
   },
   "files": [
+    "update.sh",
+    "web-ui/",
+    "cli.mjs",
     "CHANGELOG.md",
     "LICENSE",
     "npm-shrinkwrap.json",
@@ -1613,7 +1631,7 @@
     "postinstall": "echo 'Skipping postinstall'",
     "postpack": "echo 'Skipping postpack'",
     "preinstall": "echo 'Skipping preinstall'",
-    "prepack": "echo 'Skipping prepack — dist/ already included in files'",
+    "prepack": "echo 'Skipping prepack \u2014 dist/ already included in files'",
     "prepare": "echo 'Skipping prepare'",
     "prepush:ci": "bash scripts/prepush-ci.sh",
     "probe:anthropic:prompt": "node --import tsx scripts/anthropic-prompt-probe.ts",

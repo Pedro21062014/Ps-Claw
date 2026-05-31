@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -24,29 +23,24 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org/
 
-      - name: Install pnpm
-        run: corepack enable && corepack prepare pnpm@latest --activate
-
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts || true
-
-      - name: Build
-        run: node scripts/build-all.mjs || true
-
-      - name: Check version changed
+      - name: Check version vs npm
         id: check
         run: |
-          LOCAL_VERSION=$(node -p "require('./package.json').version")
-          REMOTE_VERSION=$(npm view ps-claw version 2>/dev/null || echo "0.0.0")
-          echo "local=$LOCAL_VERSION remote=$REMOTE_VERSION"
-          if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+          LOCAL=$(node -p "require('./package.json').version")
+          REMOTE=$(npm view ps-claw version 2>/dev/null || echo "0.0.0")
+          echo "Local: $LOCAL | npm: $REMOTE"
+          if [ "$LOCAL" != "$REMOTE" ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Publish
+      - name: Publish to npm
         if: steps.check.outputs.changed == 'true'
-        run: npm publish
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Skip (already published)
+        if: steps.check.outputs.changed == 'false'
+        run: echo "✅ Version already on npm, skipping publish."
