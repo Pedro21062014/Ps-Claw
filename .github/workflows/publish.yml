@@ -18,7 +18,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Get version info
         id: version
@@ -29,11 +28,18 @@ jobs:
           echo "remote=$REMOTE" >> $GITHUB_OUTPUT
           echo "📦 Local: v$LOCAL | npm: v$REMOTE"
 
+      - name: Create .npmrc with token
+        if: steps.version.outputs.local != steps.version.outputs.remote
+        run: |
+          cat > ~/.npmrc << EOF
+          //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          registry=https://registry.npmjs.org/
+          EOF
+          chmod 600 ~/.npmrc
+
       - name: Publish to npm
         if: steps.version.outputs.local != steps.version.outputs.remote
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Already published
         if: steps.version.outputs.local == steps.version.outputs.remote
