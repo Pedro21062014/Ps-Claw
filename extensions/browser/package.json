@@ -16,7 +16,7 @@
     "@openclaw/plugin-sdk": "workspace:*",
     "undici": "8.3.0"
   },
-  "openclaw": {
+  "ps-claw": {
     "extensions": [
       "./index.ts"
     ]

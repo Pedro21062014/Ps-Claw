@@ -17,17 +17,17 @@
   },
   "devDependencies": {
     "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "ps-claw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.30"
+    "ps-claw": ">=2026.5.30"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "ps-claw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "ps-claw": {
     "extensions": [
       "./index.ts"
     ],

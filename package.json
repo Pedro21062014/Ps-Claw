@@ -1,17 +1,21 @@
 {
   "name": "ps-claw",
   "version": "2026.5.30",
-  "description": "Lightweight fork of OpenClaw - multi-channel AI gateway with essential integrations",
-  "keywords": [],
-  "homepage": "https://github.com/ps-claw/ps-claw#readme",
+  "description": "PS Claw - AI Agent Gateway with multi-provider support, web UI, and CLI. Lightweight fork of OpenClaw.",
+  "keywords": ["ai", "agent", "gateway", "chatgpt", "openai", "anthropic", "claude", "gemini", "deepseek", "llm", "ai-gateway", "chatbot", "cli", "web-ui"],
+  "homepage": "https://github.com/Pedro21062014/Ps-Claw#readme",
   "bugs": {
-    "url": "https://github.com/ps-claw/ps-claw/issues"
+    "url": "https://github.com/Pedro21062014/Ps-Claw/issues"
   },
   "license": "MIT",
-  "author": "",
+  "author": "Pedro21062014",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ps-claw/ps-claw.git"
+    "url": "git+https://github.com/Pedro21062014/Ps-Claw.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "bin": {
     "ps-claw": "ps-claw.mjs"

@@ -6,57 +6,193 @@
   <title>PS Claw</title>
   <style>
     :root {
-      --bg: #212121;
-      --sidebar-bg: #171717;
-      --input-bg: #2f2f2f;
-      --border: #3f3f3f;
-      --text: #ececec;
-      --text-muted: #8e8ea0;
+      --bg: #1a1a2e;
+      --bg-deep: #0f0f1e;
+      --sidebar-bg: #12122a;
+      --input-bg: #1e1e3a;
+      --border: #2a2a4a;
+      --text: #e8e8f0;
+      --text-muted: #7a7a9e;
       --accent: #10a37f;
       --accent-hover: #0d8c6d;
-      --user-bubble: #2f2f2f;
+      --accent-glow: rgba(16,163,127,0.3);
+      --user-bubble: #252550;
       --ai-bubble: transparent;
       --danger: #e53e3e;
+      --warning: #f59e0b;
+      --info: #3b82f6;
       --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
     /* SIDEBAR */
     #sidebar {
-      width: 260px; min-width: 260px; background: var(--sidebar-bg);
+      width: 280px; min-width: 280px; background: var(--sidebar-bg);
       display: flex; flex-direction: column; border-right: 1px solid var(--border);
       transition: transform 0.25s; z-index: 10;
     }
-    #sidebar-header { padding: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    #sidebar-header {
+      padding: 16px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
     #sidebar-header h1 { font-size: 18px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+
+    /* TAB NAVIGATION */
+    .tab-nav {
+      display: flex; border-bottom: 1px solid var(--border); background: var(--bg-deep);
+    }
+    .tab-btn {
+      flex: 1; padding: 10px 4px; background: transparent; border: none;
+      color: var(--text-muted); font-size: 11px; cursor: pointer;
+      transition: all var(--transition); display: flex; flex-direction: column;
+      align-items: center; gap: 3px; border-bottom: 2px solid transparent;
+      position: relative;
+    }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-btn svg { width: 18px; height: 18px; }
+    .tab-btn .tab-label { font-weight: 500; }
+
+    /* TAB PANELS */
+    .tab-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+    .tab-panel.active { display: flex; }
+
+    /* CHAT TAB */
     #new-chat-btn {
-      width: 100%; margin: 8px 0; padding: 10px 14px;
-      background: transparent; border: 1px solid var(--border);
+      width: calc(100% - 16px); margin: 8px 8px 4px; padding: 10px 14px;
+      background: transparent; border: 1px dashed var(--border);
       color: var(--text); border-radius: var(--radius); cursor: pointer;
       font-size: 13px; text-align: left; display: flex; align-items: center; gap: 8px;
-      transition: background 0.15s;
+      transition: all var(--transition);
     }
-    #new-chat-btn:hover { background: var(--input-bg); }
+    #new-chat-btn:hover { background: var(--input-bg); border-color: var(--accent); }
     #chat-list { flex: 1; overflow-y: auto; padding: 4px 8px; }
     .chat-item {
-      padding: 8px 10px; border-radius: 8px; cursor: pointer;
+      padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer;
       font-size: 13px; color: var(--text-muted); white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis; transition: background 0.15s;
+      overflow: hidden; text-overflow: ellipsis; transition: background var(--transition);
       display: flex; align-items: center; justify-content: space-between;
     }
     .chat-item:hover { background: var(--input-bg); color: var(--text); }
-    .chat-item.active { background: var(--input-bg); color: var(--text); }
+    .chat-item.active { background: var(--input-bg); color: var(--text); border-left: 2px solid var(--accent); }
     .chat-item-del { opacity: 0; font-size: 11px; padding: 2px 5px; border-radius: 4px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; }
     .chat-item:hover .chat-item-del { opacity: 1; }
     .chat-item-del:hover { color: var(--danger); }
-    #sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+
+    /* GATEWAYS TAB */
+    .gw-section { padding: 12px; }
+    .gw-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .gw-card {
+      background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 12px; margin-bottom: 8px; transition: border-color var(--transition);
+    }
+    .gw-card:hover { border-color: var(--accent); }
+    .gw-card.connected { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+    .gw-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .gw-card-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .gw-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #888; flex-shrink: 0; }
+    .gw-status-dot.online { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+    .gw-status-dot.offline { background: var(--danger); }
+    .gw-card-url { font-size: 11px; color: var(--text-muted); word-break: break-all; margin-bottom: 6px; }
+    .gw-card-actions { display: flex; gap: 6px; }
+    .gw-btn {
+      padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted); cursor: pointer; transition: all var(--transition);
+    }
+    .gw-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .gw-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .gw-btn.primary:hover { background: var(--accent-hover); }
+    .gw-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+    .gw-add-btn {
+      width: 100%; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius-sm);
+      background: transparent; color: var(--text-muted); cursor: pointer; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: all var(--transition);
+    }
+    .gw-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .gw-list { overflow-y: auto; flex: 1; }
+
+    /* MODELS TAB */
+    .model-section { padding: 12px; overflow-y: auto; flex: 1; }
+    .provider-group { margin-bottom: 16px; }
+    .provider-header {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+      background: var(--input-bg); border-radius: var(--radius-sm); margin-bottom: 8px;
+      cursor: pointer; transition: all var(--transition);
+    }
+    .provider-header:hover { background: rgba(255,255,255,0.05); }
+    .provider-icon { font-size: 18px; }
+    .provider-name { font-size: 13px; font-weight: 600; flex: 1; }
+    .provider-count { font-size: 11px; color: var(--text-muted); background: var(--bg-deep); padding: 2px 8px; border-radius: 10px; }
+    .provider-toggle { font-size: 12px; color: var(--text-muted); transition: transform var(--transition); }
+    .provider-toggle.open { transform: rotate(180deg); }
+    .model-list { display: none; padding-left: 4px; }
+    .model-list.open { display: block; }
+    .model-item {
+      display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+      border-radius: 6px; cursor: pointer; font-size: 13px; transition: background var(--transition);
+    }
+    .model-item:hover { background: var(--input-bg); }
+    .model-item.selected { background: rgba(16,163,127,0.1); color: var(--accent); }
+    .model-item.selected .model-radio { border-color: var(--accent); background: var(--accent); }
+    .model-radio {
+      width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border);
+      flex-shrink: 0; position: relative; transition: all var(--transition);
+    }
+    .model-item.selected .model-radio::after {
+      content: ''; position: absolute; top: 3px; left: 3px; width: 6px; height: 6px;
+      border-radius: 50%; background: white;
+    }
+    .model-name { flex: 1; }
+    .model-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-deep); color: var(--text-muted); }
+
+    /* SETTINGS TAB */
+    .settings-section { padding: 12px; overflow-y: auto; flex: 1; }
+    .settings-group { margin-bottom: 20px; }
+    .settings-group-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-muted); margin-bottom: 10px;
+    }
+    .settings-field { margin-bottom: 12px; }
+    .settings-field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
+    .settings-field input, .settings-field select, .settings-field textarea {
+      width: 100%; padding: 8px 10px; background: var(--input-bg);
+      border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+      font-size: 13px; outline: none; transition: border-color var(--transition);
+    }
+    .settings-field input:focus, .settings-field select:focus, .settings-field textarea:focus { border-color: var(--accent); }
+    .settings-field textarea { resize: vertical; min-height: 60px; font-family: monospace; font-size: 12px; }
+    .settings-field .hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .settings-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .settings-toggle-label { font-size: 13px; }
+    .toggle-switch {
+      width: 40px; height: 22px; background: var(--border); border-radius: 11px;
+      cursor: pointer; position: relative; transition: background var(--transition);
+    }
+    .toggle-switch.on { background: var(--accent); }
+    .toggle-switch::after {
+      content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px;
+      background: white; border-radius: 50%; transition: transform var(--transition);
+    }
+    .toggle-switch.on::after { transform: translateX(18px); }
+
+    /* SIDEBAR FOOTER */
+    #sidebar-footer { padding: 10px; border-top: 1px solid var(--border); }
     #status-badge {
       display: flex; align-items: center; gap: 8px; font-size: 12px;
-      color: var(--text-muted); padding: 8px; border-radius: 8px; background: var(--input-bg);
+      color: var(--text-muted); padding: 8px; border-radius: var(--radius-sm); background: var(--input-bg);
     }
     #status-dot { width: 8px; height: 8px; border-radius: 50%; background: #888; flex-shrink: 0; }
-    #status-dot.online { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+    #status-dot.online { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
     #status-dot.offline { background: var(--danger); }
 
     /* MAIN */
@@ -66,12 +202,14 @@
       display: flex; align-items: center; justify-content: space-between;
       background: var(--bg);
     }
+    #topbar-left { display: flex; align-items: center; gap: 10px; }
     #topbar-title { font-size: 15px; font-weight: 600; }
-    #model-selector {
-      background: var(--input-bg); border: 1px solid var(--border);
-      color: var(--text); padding: 6px 12px; border-radius: 8px;
-      font-size: 13px; cursor: pointer; outline: none;
+    #model-indicator {
+      display: flex; align-items: center; gap: 6px; font-size: 12px;
+      padding: 4px 10px; background: var(--input-bg); border-radius: 20px;
+      color: var(--text-muted); border: 1px solid var(--border);
     }
+    #model-indicator .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
     /* MESSAGES */
     #messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 4px; scroll-behavior: smooth; }
@@ -86,8 +224,8 @@
       display: flex; align-items: center; justify-content: center; font-size: 14px;
       font-weight: 700;
     }
-    .avatar.ai { background: var(--accent); color: white; }
-    .avatar.user { background: #6c6ef5; color: white; }
+    .avatar.ai { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: white; }
+    .avatar.user { background: linear-gradient(135deg, #6c6ef5, #8b5cf6); color: white; }
     .bubble {
       max-width: calc(100% - 50px); padding: 12px 16px; border-radius: 16px;
       font-size: 14px; line-height: 1.65; word-break: break-word;
@@ -95,7 +233,7 @@
     .bubble.ai { background: var(--ai-bubble); border-radius: 0 16px 16px 16px; }
     .bubble.user { background: var(--user-bubble); border-radius: 16px 16px 0 16px; }
     .bubble pre {
-      background: #1a1a1a; border: 1px solid var(--border); border-radius: 8px;
+      background: #0d0d1a; border: 1px solid var(--border); border-radius: 8px;
       padding: 12px; overflow-x: auto; margin: 8px 0; font-size: 13px;
     }
     .bubble code { font-family: 'Cascadia Code', 'Fira Code', monospace; }
@@ -112,15 +250,15 @@
       flex: 1; display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 16px; color: var(--text-muted); padding: 40px;
     }
-    #welcome h2 { font-size: 28px; color: var(--text); }
+    #welcome h2 { font-size: 28px; color: var(--text); background: linear-gradient(135deg, var(--accent), #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     #welcome p { font-size: 15px; text-align: center; max-width: 440px; }
     .welcome-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
     .chip {
       padding: 8px 14px; background: var(--input-bg); border: 1px solid var(--border);
-      border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s;
+      border-radius: 20px; font-size: 13px; cursor: pointer; transition: all var(--transition);
       color: var(--text);
     }
-    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
     /* INPUT */
     #input-area { padding: 16px 20px 20px; background: var(--bg); }
@@ -128,9 +266,9 @@
       max-width: 800px; margin: 0 auto;
       background: var(--input-bg); border: 1px solid var(--border);
       border-radius: var(--radius); display: flex; align-items: flex-end; gap: 8px;
-      padding: 12px 14px; transition: border-color 0.15s;
+      padding: 12px 14px; transition: border-color var(--transition);
     }
-    #input-box:focus-within { border-color: var(--accent); }
+    #input-box:focus-within { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
     #msg-input {
       flex: 1; background: transparent; border: none; outline: none;
       color: var(--text); font-size: 14px; resize: none; max-height: 200px;
@@ -141,36 +279,52 @@
       width: 34px; height: 34px; border-radius: 8px; border: none;
       background: var(--accent); color: white; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s; flex-shrink: 0;
+      transition: background var(--transition); flex-shrink: 0;
     }
     #send-btn:hover:not(:disabled) { background: var(--accent-hover); }
     #send-btn:disabled { background: var(--border); cursor: not-allowed; }
     #input-hint { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 8px; }
 
-    /* SETTINGS MODAL */
-    #settings-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    /* MODAL */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       z-index: 100; align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
     }
-    #settings-overlay.open { display: flex; }
-    #settings-modal {
+    #modal-overlay.open { display: flex; }
+    #modal-box {
       background: var(--sidebar-bg); border: 1px solid var(--border); border-radius: 16px;
-      padding: 28px; width: 440px; max-width: 95vw;
+      padding: 24px; width: 460px; max-width: 95vw; max-height: 85vh; overflow-y: auto;
     }
-    #settings-modal h2 { margin-bottom: 20px; font-size: 18px; }
-    .field { margin-bottom: 16px; }
-    .field label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+    #modal-box h2 { margin-bottom: 20px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
     .field input, .field select {
       width: 100%; padding: 9px 12px; background: var(--input-bg);
-      border: 1px solid var(--border); border-radius: 8px; color: var(--text);
-      font-size: 14px; outline: none;
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-size: 13px; outline: none; transition: border-color var(--transition);
     }
     .field input:focus, .field select:focus { border-color: var(--accent); }
+    .field .hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-    .btn { padding: 8px 18px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; }
+    .btn { padding: 8px 18px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; border: none; transition: all var(--transition); }
     .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
     .btn-primary { background: var(--accent); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
     .btn:hover { opacity: 0.85; }
+
+    /* TOAST */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px;
+      color: white; animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .toast.success { background: var(--accent); }
+    .toast.error { background: var(--danger); }
+    .toast.info { background: var(--info); }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
     @media (max-width: 640px) {
       #sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
@@ -185,18 +339,72 @@
 </head>
 <body>
 
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>🦞 PS Claw</h1>
-    <button onclick="openSettings()" title="Configurações" style="background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;">⚙️</button>
+    <button onclick="openModal('about')" title="Sobre" style="background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;">ℹ️</button>
   </div>
-  <div style="padding: 8px 8px 4px;">
-    <button id="new-chat-btn" onclick="newChat()">
-      <span>✏️</span> Novo Chat
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('chat')" id="tab-chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="tab-label">Chat</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('gateways')" id="tab-gateways">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m16.66-5.66l-4.24 4.24m-2.84 0L6.34 6.34m11.32 11.32l-4.24-4.24m-2.84 0L6.34 17.66"/></svg>
+      <span class="tab-label">Gateways</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('models')" id="tab-models">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span class="tab-label">Modelos</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('settings')" id="tab-settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span class="tab-label">Config</span>
     </button>
   </div>
-  <div id="chat-list"></div>
+
+  <!-- CHAT TAB PANEL -->
+  <div class="tab-panel active" id="panel-chat">
+    <div style="padding: 8px 8px 4px;">
+      <button id="new-chat-btn" onclick="newChat()">
+        <span>✏️</span> Novo Chat
+      </button>
+    </div>
+    <div id="chat-list"></div>
+  </div>
+
+  <!-- GATEWAYS TAB PANEL -->
+  <div class="tab-panel" id="panel-gateways">
+    <div class="gw-section">
+      <div class="gw-section-title">
+        <span>Conexões de API</span>
+      </div>
+    </div>
+    <div class="gw-list" id="gateway-list"></div>
+    <div class="gw-section">
+      <button class="gw-add-btn" onclick="openModal('addGateway')">
+        <span>+</span> Adicionar Gateway
+      </button>
+    </div>
+  </div>
+
+  <!-- MODELS TAB PANEL -->
+  <div class="tab-panel" id="panel-models">
+    <div class="model-section" id="model-list"></div>
+  </div>
+
+  <!-- SETTINGS TAB PANEL -->
+  <div class="tab-panel" id="panel-settings">
+    <div class="settings-section" id="settings-panel"></div>
+  </div>
+
+  <!-- SIDEBAR FOOTER -->
   <div id="sidebar-footer">
     <div id="status-badge">
       <div id="status-dot"></div>
@@ -208,28 +416,24 @@
 <!-- MAIN -->
 <div id="main">
   <div id="topbar">
-    <div style="display:flex;align-items:center;gap:10px;">
+    <div id="topbar-left">
       <button id="menu-btn" onclick="toggleSidebar()">☰</button>
       <span id="topbar-title">PS Claw</span>
     </div>
-    <select id="model-selector">
-      <option value="">Modelo padrão</option>
-      <option value="claude-opus-4-5">Claude Opus 4.5</option>
-      <option value="claude-sonnet-4-5">Claude Sonnet 4.5</option>
-      <option value="gpt-4o">GPT-4o</option>
-      <option value="gpt-4o-mini">GPT-4o mini</option>
-      <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-    </select>
+    <div id="model-indicator">
+      <div class="dot"></div>
+      <span id="current-model-name">Modelo padrao</span>
+    </div>
   </div>
 
   <div id="messages">
     <div id="welcome">
       <div style="font-size:56px;">🦞</div>
       <h2>PS Claw</h2>
-      <p>Agente de IA autônomo leve e poderoso. Configure sua chave de API e comece a conversar.</p>
+      <p>Agente de IA autonomo leve e poderoso. Configure sua chave de API e comece a conversar.</p>
       <div class="welcome-chips">
-        <div class="chip" onclick="sendQuick('Olá! O que você consegue fazer?')">O que você consegue fazer?</div>
-        <div class="chip" onclick="sendQuick('Me ajude a escrever um script Python')">Escrever código</div>
+        <div class="chip" onclick="sendQuick('Ola! O que voce consegue fazer?')">O que voce consegue fazer?</div>
+        <div class="chip" onclick="sendQuick('Me ajude a escrever um script Python')">Escrever codigo</div>
         <div class="chip" onclick="sendQuick('Pesquise na web sobre IA em 2025')">Pesquisar na web</div>
         <div class="chip" onclick="sendQuick('Explique como funciona o PS Claw')">Sobre o PS Claw</div>
       </div>
@@ -250,70 +454,374 @@
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
-<div id="settings-overlay" onclick="closeSettings(event)">
-  <div id="settings-modal">
-    <h2>⚙️ Configurações</h2>
-    <div class="field">
-      <label>URL do Gateway PS Claw</label>
-      <input type="text" id="cfg-gateway" placeholder="http://localhost:18789" />
-    </div>
-    <div class="field">
-      <label>Token do Gateway (opcional)</label>
-      <input type="password" id="cfg-token" placeholder="Seu OPENCLAW_GATEWAY_TOKEN" />
-    </div>
-    <div class="field">
-      <label>Nome de exibição</label>
-      <input type="text" id="cfg-name" placeholder="Você" />
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeSettings()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveSettings()">Salvar</button>
-    </div>
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal-box">
+    <div id="modal-content"></div>
   </div>
 </div>
 
 <script>
-// ─── Estado ───────────────────────────────────────────────────────────────
+// === STATE ===
 let sessions = JSON.parse(localStorage.getItem('ps-claw-sessions') || '[]');
 let currentSession = null;
 let isTyping = false;
+let activeTab = 'chat';
+
 let cfg = JSON.parse(localStorage.getItem('ps-claw-cfg') || '{}');
-cfg.gateway = cfg.gateway || 'http://localhost:3000/gateway';
-cfg.token   = cfg.token   || '';
-cfg.name    = cfg.name    || 'Você';
+cfg.gateways = cfg.gateways || [
+  { id: 'default', name: 'PS Claw Local', url: 'http://localhost:3000/gateway', token: '', type: 'ps-claw', connected: false }
+];
+cfg.selectedGateway = cfg.selectedGateway || 'default';
+cfg.selectedModel = cfg.selectedModel || '';
+cfg.displayName = cfg.displayName || 'Voce';
+cfg.temperature = cfg.temperature ?? 0.7;
+cfg.maxTokens = cfg.maxTokens ?? 4096;
+cfg.systemPrompt = cfg.systemPrompt || '';
+cfg.streamResponses = cfg.streamResponses ?? true;
+cfg.darkMode = cfg.darkMode ?? true;
 
-// ─── Inicialização ────────────────────────────────────────────────────────
+const PROVIDERS = [
+  {
+    id: 'openai', name: 'OpenAI', icon: '🟢',
+    models: [
+      { id: 'gpt-4o', name: 'GPT-4o', tag: 'Premium' },
+      { id: 'gpt-4o-mini', name: 'GPT-4o Mini', tag: 'Rapido' },
+      { id: 'gpt-4-turbo', name: 'GPT-4 Turbo', tag: 'Avancado' },
+      { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo', tag: 'Economico' },
+      { id: 'o1-preview', name: 'o1 Preview', tag: 'Raciocinio' },
+      { id: 'o1-mini', name: 'o1 Mini', tag: 'Raciocinio' },
+      { id: 'gpt-4-vision-preview', name: 'GPT-4 Vision', tag: 'Visao' },
+    ]
+  },
+  {
+    id: 'anthropic', name: 'Anthropic', icon: '🟠',
+    models: [
+      { id: 'claude-opus-4-5', name: 'Claude Opus 4.5', tag: 'Premium' },
+      { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5', tag: 'Balanceado' },
+      { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet', tag: 'Rapido' },
+      { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku', tag: 'Economico' },
+    ]
+  },
+  {
+    id: 'google', name: 'Google', icon: '🔵',
+    models: [
+      { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', tag: 'Premium' },
+      { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash', tag: 'Rapido' },
+      { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro', tag: 'Avancado' },
+      { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash', tag: 'Economico' },
+    ]
+  },
+  {
+    id: 'deepseek', name: 'DeepSeek', icon: '🟣',
+    models: [
+      { id: 'deepseek-chat', name: 'DeepSeek Chat', tag: 'Geral' },
+      { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', tag: 'Raciocinio' },
+    ]
+  },
+  {
+    id: 'openrouter', name: 'OpenRouter', icon: '🌐',
+    models: [
+      { id: 'openrouter-auto', name: 'Auto (melhor modelo)', tag: 'Auto' },
+      { id: 'meta-llama/llama-3.1-405b-instruct', name: 'Llama 3.1 405B', tag: 'Open Source' },
+      { id: 'mistralai/mixtral-8x7b-instruct', name: 'Mixtral 8x7B', tag: 'Open Source' },
+    ]
+  },
+  {
+    id: 'local', name: 'Local / LM Studio', icon: '💻',
+    models: [
+      { id: 'local-default', name: 'Modelo Local Padrao', tag: 'Local' },
+    ]
+  }
+];
+
+// === INIT ===
 renderChatList();
-checkGateway();
-setInterval(checkGateway, 15000);
+renderGatewayList();
+renderModelList();
+renderSettingsPanel();
+checkAllGateways();
+setInterval(checkAllGateways, 15000);
+updateModelIndicator();
 
-// ─── Gateway ──────────────────────────────────────────────────────────────
-async function checkGateway() {
-  const dot  = document.getElementById('status-dot');
-  const text = document.getElementById('status-text');
-  try {
-    const r = await fetch(cfg.gateway + '/health', {
-      headers: cfg.token ? { Authorization: 'Bearer ' + cfg.token } : {},
-      signal: AbortSignal.timeout(3000)
-    });
-    if (r.ok) {
-      dot.className = 'online'; text.textContent = 'Gateway online';
-    } else {
-      dot.className = 'offline'; text.textContent = 'Gateway com erro';
+// === TAB NAVIGATION ===
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// === GATEWAY ===
+function getActiveGateway() {
+  return cfg.gateways.find(g => g.id === cfg.selectedGateway) || cfg.gateways[0];
+}
+
+async function checkAllGateways() {
+  for (const gw of cfg.gateways) {
+    try {
+      const r = await fetch(gw.url + '/health', {
+        headers: gw.token ? { Authorization: 'Bearer ' + gw.token } : {},
+        signal: AbortSignal.timeout(3000)
+      });
+      gw.connected = r.ok;
+    } catch {
+      gw.connected = false;
     }
-  } catch {
-    dot.className = 'offline'; text.textContent = 'Gateway offline';
+  }
+  updateGatewayStatus();
+  renderGatewayList();
+}
+
+function updateGatewayStatus() {
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  const activeGw = getActiveGateway();
+  if (activeGw?.connected) {
+    dot.className = 'online'; text.textContent = activeGw.name + ' - Online';
+  } else {
+    dot.className = 'offline'; text.textContent = activeGw?.name + ' - Offline';
   }
 }
 
-// ─── Chat ─────────────────────────────────────────────────────────────────
+function renderGatewayList() {
+  const list = document.getElementById('gateway-list');
+  list.innerHTML = cfg.gateways.map(gw => `
+    <div class="gw-section">
+      <div class="gw-card ${gw.connected ? 'connected' : ''} ${gw.id === cfg.selectedGateway ? 'connected' : ''}">
+        <div class="gw-card-header">
+          <div class="gw-card-name">
+            <div class="gw-status-dot ${gw.connected ? 'online' : 'offline'}"></div>
+            ${escHtml(gw.name)}
+          </div>
+          <span style="font-size:11px;color:var(--text-muted);">${gw.type}</span>
+        </div>
+        <div class="gw-card-url">${escHtml(gw.url)}</div>
+        <div class="gw-card-actions">
+          <button class="gw-btn primary" onclick="selectGateway('${gw.id}')">Conectar</button>
+          <button class="gw-btn" onclick="openModal('editGateway','${gw.id}')">Editar</button>
+          ${gw.id !== 'default' ? `<button class="gw-btn danger" onclick="removeGateway('${gw.id}')">Remover</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectGateway(id) {
+  cfg.selectedGateway = id;
+  saveCfg();
+  renderGatewayList();
+  updateGatewayStatus();
+  showToast('Gateway selecionado: ' + cfg.gateways.find(g => g.id === id)?.name, 'success');
+}
+
+function removeGateway(id) {
+  if (id === 'default') return;
+  cfg.gateways = cfg.gateways.filter(g => g.id !== id);
+  if (cfg.selectedGateway === id) cfg.selectedGateway = 'default';
+  saveCfg();
+  renderGatewayList();
+  checkAllGateways();
+  showToast('Gateway removido', 'info');
+}
+
+// === MODELS ===
+function renderModelList() {
+  const container = document.getElementById('model-list');
+  container.innerHTML = PROVIDERS.map(p => `
+    <div class="provider-group">
+      <div class="provider-header" onclick="toggleProvider('${p.id}')">
+        <span class="provider-icon">${p.icon}</span>
+        <span class="provider-name">${p.name}</span>
+        <span class="provider-count">${p.models.length}</span>
+        <span class="provider-toggle" id="toggle-${p.id}">▼</span>
+      </div>
+      <div class="model-list" id="models-${p.id}">
+        ${p.models.map(m => `
+          <div class="model-item ${cfg.selectedModel === m.id ? 'selected' : ''}" onclick="selectModel('${m.id}', '${m.name}')">
+            <div class="model-radio"></div>
+            <span class="model-name">${m.name}</span>
+            <span class="model-tag">${m.tag}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleProvider(id) {
+  const list = document.getElementById('models-' + id);
+  const toggle = document.getElementById('toggle-' + id);
+  list.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function selectModel(id, name) {
+  cfg.selectedModel = id;
+  saveCfg();
+  renderModelList();
+  updateModelIndicator();
+  showToast('Modelo selecionado: ' + name, 'success');
+}
+
+function updateModelIndicator() {
+  const el = document.getElementById('current-model-name');
+  if (cfg.selectedModel) {
+    let name = cfg.selectedModel;
+    for (const p of PROVIDERS) {
+      const m = p.models.find(m => m.id === cfg.selectedModel);
+      if (m) { name = m.name; break; }
+    }
+    el.textContent = name;
+  } else {
+    el.textContent = 'Modelo padrao';
+  }
+}
+
+// === SETTINGS ===
+function renderSettingsPanel() {
+  const panel = document.getElementById('settings-panel');
+  panel.innerHTML = `
+    <div class="settings-group">
+      <div class="settings-group-title">Perfil</div>
+      <div class="settings-field">
+        <label>Nome de exibicao</label>
+        <input type="text" id="s-name" value="${escAttr(cfg.displayName)}" placeholder="Voce" onchange="updateSetting('displayName', this.value)" />
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Modelo e Comportamento</div>
+      <div class="settings-field">
+        <label>Temperatura (${cfg.temperature})</label>
+        <input type="range" min="0" max="2" step="0.1" value="${cfg.temperature}" oninput="updateSetting('temperature', parseFloat(this.value)); this.previousElementSibling.textContent='Temperatura ('+this.value+')'" />
+        <div class="hint">Valores mais baixos = respostas mais deterministas. Valores mais altos = mais criatividade.</div>
+      </div>
+      <div class="settings-field">
+        <label>Max Tokens</label>
+        <input type="number" id="s-maxtokens" value="${cfg.maxTokens}" min="100" max="128000" step="100" onchange="updateSetting('maxTokens', parseInt(this.value))" />
+        <div class="hint">Limite maximo de tokens na resposta.</div>
+      </div>
+      <div class="settings-field">
+        <label>System Prompt</label>
+        <textarea id="s-systemprompt" onchange="updateSetting('systemPrompt', this.value)">${escHtml(cfg.systemPrompt)}</textarea>
+        <div class="hint">Instrucoes iniciais para o modelo. Define o comportamento da IA.</div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Preferencias</div>
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Respostas em stream</span>
+        <div class="toggle-switch ${cfg.streamResponses ? 'on' : ''}" onclick="toggleSetting('streamResponses', this)"></div>
+      </div>
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Modo escuro</span>
+        <div class="toggle-switch ${cfg.darkMode ? 'on' : ''}" onclick="toggleSetting('darkMode', this)"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Chaves de API (salvas localmente)</div>
+      <div class="settings-field">
+        <label>OpenAI API Key</label>
+        <input type="password" id="s-key-openai" value="${escAttr(cfg.apiKeys?.openai || '')}" placeholder="sk-..." onchange="updateApiKey('openai', this.value)" />
+      </div>
+      <div class="settings-field">
+        <label>Anthropic API Key</label>
+        <input type="password" id="s-key-anthropic" value="${escAttr(cfg.apiKeys?.anthropic || '')}" placeholder="sk-ant-..." onchange="updateApiKey('anthropic', this.value)" />
+      </div>
+      <div class="settings-field">
+        <label>Google / Gemini API Key</label>
+        <input type="password" id="s-key-google" value="${escAttr(cfg.apiKeys?.google || '')}" placeholder="AI..." onchange="updateApiKey('google', this.value)" />
+      </div>
+      <div class="settings-field">
+        <label>DeepSeek API Key</label>
+        <input type="password" id="s-key-deepseek" value="${escAttr(cfg.apiKeys?.deepseek || '')}" placeholder="sk-..." onchange="updateApiKey('deepseek', this.value)" />
+      </div>
+      <div class="settings-field">
+        <label>OpenRouter API Key</label>
+        <input type="password" id="s-key-openrouter" value="${escAttr(cfg.apiKeys?.openrouter || '')}" placeholder="sk-or-..." onchange="updateApiKey('openrouter', this.value)" />
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Dados</div>
+      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="exportConfig()">Exportar Configuracoes</button>
+      <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="document.getElementById('import-input').click()">Importar Configuracoes</button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importConfig(event)" />
+      <button class="btn btn-danger" style="width:100%;" onclick="clearAllData()">Limpar Todos os Dados</button>
+    </div>
+  `;
+}
+
+function updateSetting(key, value) {
+  cfg[key] = value;
+  saveCfg();
+}
+
+function toggleSetting(key, el) {
+  cfg[key] = !cfg[key];
+  el.classList.toggle('on');
+  saveCfg();
+}
+
+function updateApiKey(provider, value) {
+  if (!cfg.apiKeys) cfg.apiKeys = {};
+  cfg.apiKeys[provider] = value;
+  saveCfg();
+  showToast('Chave ' + provider.toUpperCase() + ' salva localmente', 'success');
+}
+
+function exportConfig() {
+  const data = JSON.stringify(cfg, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ps-claw-config.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Configuracoes exportadas', 'success');
+}
+
+function importConfig(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      Object.assign(cfg, imported);
+      saveCfg();
+      renderSettingsPanel();
+      renderGatewayList();
+      renderModelList();
+      updateModelIndicator();
+      showToast('Configuracoes importadas com sucesso', 'success');
+    } catch {
+      showToast('Erro ao importar: arquivo invalido', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  if (!confirm('Tem certeza? Isso apagara todas as conversas e configuracoes.')) return;
+  localStorage.removeItem('ps-claw-sessions');
+  localStorage.removeItem('ps-claw-cfg');
+  sessions = [];
+  currentSession = null;
+  location.reload();
+}
+
+// === CHAT ===
 function newChat() {
   const id = Date.now().toString();
   const session = { id, title: 'Nova conversa', messages: [], created: Date.now() };
   sessions.unshift(session);
   saveSessions();
   selectChat(id);
+  switchTab('chat');
 }
 
 function selectChat(id) {
@@ -335,13 +843,13 @@ function saveSessions() {
   localStorage.setItem('ps-claw-sessions', JSON.stringify(sessions));
 }
 
-// ─── Render ───────────────────────────────────────────────────────────────
+// === RENDER CHAT ===
 function renderChatList() {
   const list = document.getElementById('chat-list');
   list.innerHTML = sessions.map(s => `
     <div class="chat-item ${s.id === currentSession?.id ? 'active' : ''}" onclick="selectChat('${s.id}')">
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(s.title)}</span>
-      <button class="chat-item-del" onclick="deleteChat('${s.id}', event)" title="Excluir">✕</button>
+      <button class="chat-item-del" onclick="deleteChat('${s.id}', event)" title="Excluir">x</button>
     </div>
   `).join('');
 }
@@ -352,10 +860,10 @@ function renderMessages() {
     box.innerHTML = `<div id="welcome">
       <div style="font-size:56px;">🦞</div>
       <h2>PS Claw</h2>
-      <p>Agente de IA autônomo. Configure sua chave de API e comece a conversar.</p>
+      <p>Agente de IA autonomo. Configure sua chave de API e comece a conversar.</p>
       <div class="welcome-chips">
-        <div class="chip" onclick="sendQuick('Olá! O que você consegue fazer?')">O que você consegue fazer?</div>
-        <div class="chip" onclick="sendQuick('Me ajude a escrever um script Python')">Escrever código</div>
+        <div class="chip" onclick="sendQuick('Ola! O que voce consegue fazer?')">O que voce consegue fazer?</div>
+        <div class="chip" onclick="sendQuick('Me ajude a escrever um script Python')">Escrever codigo</div>
         <div class="chip" onclick="sendQuick('Pesquise na web sobre IA em 2025')">Pesquisar na web</div>
         <div class="chip" onclick="sendQuick('Explique como funciona o PS Claw')">Sobre o PS Claw</div>
       </div>
@@ -370,7 +878,7 @@ function renderMsg(m) {
   const isUser = m.role === 'user';
   return `
     <div class="msg-row ${isUser ? 'user' : 'ai'}">
-      <div class="avatar ${isUser ? 'user' : 'ai'}">${isUser ? (cfg.name[0]||'V').toUpperCase() : '🦞'}</div>
+      <div class="avatar ${isUser ? 'user' : 'ai'}">${isUser ? (cfg.displayName[0]||'V').toUpperCase() : '🦞'}</div>
       <div class="bubble ${isUser ? 'user' : 'ai'}">${formatText(m.content)}</div>
     </div>`;
 }
@@ -388,10 +896,10 @@ function removeTypingIndicator() {
   document.getElementById('typing-row')?.remove();
 }
 
-// ─── Envio ────────────────────────────────────────────────────────────────
+// === SEND MESSAGE ===
 async function sendMessage() {
   const input = document.getElementById('msg-input');
-  const text  = input.value.trim();
+  const text = input.value.trim();
   if (!text || isTyping) return;
   if (!currentSession) newChat();
 
@@ -404,7 +912,7 @@ async function sendMessage() {
 
   currentSession.messages.push({ role: 'user', content: text });
   if (currentSession.messages.length === 1) {
-    currentSession.title = text.slice(0, 40) + (text.length > 40 ? '…' : '');
+    currentSession.title = text.slice(0, 40) + (text.length > 40 ? '...' : '');
     renderChatList();
   }
   saveSessions();
@@ -412,21 +920,24 @@ async function sendMessage() {
   addTypingIndicator();
 
   try {
-    const model = document.getElementById('model-selector').value;
+    const gw = getActiveGateway();
     const body = {
       text,
-      ...(model && { model }),
+      ...(cfg.selectedModel && { model: cfg.selectedModel }),
+      temperature: cfg.temperature,
+      max_tokens: cfg.maxTokens,
+      ...(cfg.systemPrompt && { system: cfg.systemPrompt }),
       history: currentSession.messages.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
     };
 
-    const resp = await fetch(cfg.gateway + '/chat', {
+    const resp = await fetch(gw.url + '/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(cfg.token && { Authorization: 'Bearer ' + cfg.token })
+        ...(gw.token && { Authorization: 'Bearer ' + gw.token })
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(60000)
+      signal: AbortSignal.timeout(120000)
     });
 
     removeTypingIndicator();
@@ -457,13 +968,20 @@ async function sendMessage() {
 }
 
 async function tryFallbackChat(text) {
+  const gw = getActiveGateway();
   const endpoints = ['/v1/chat', '/api/chat', '/message'];
   for (const ep of endpoints) {
     try {
-      const r = await fetch(cfg.gateway + ep, {
+      const r = await fetch(gw.url + ep, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...(cfg.token && { Authorization: 'Bearer ' + cfg.token }) },
-        body: JSON.stringify({ message: text, messages: [{ role: 'user', content: text }] }),
+        headers: { 'Content-Type': 'application/json', ...(gw.token && { Authorization: 'Bearer ' + gw.token }) },
+        body: JSON.stringify({
+          message: text,
+          model: cfg.selectedModel || undefined,
+          temperature: cfg.temperature,
+          max_tokens: cfg.maxTokens,
+          messages: [{ role: 'user', content: text }]
+        }),
         signal: AbortSignal.timeout(10000)
       });
       if (r.ok) {
@@ -472,7 +990,9 @@ async function tryFallbackChat(text) {
       }
     } catch {}
   }
-  return `⚠️ **Gateway offline ou configuração necessária**\n\nO PS Claw não está respondendo. Verifique:\n\n1. Execute o PS Claw: \`node openclaw.mjs\`\n2. Configure a URL do gateway em ⚙️ Configurações\n3. Adicione seu token se necessário\n\nGateway esperado em: \`${cfg.gateway}\``;
+  const gwName = gw ? gw.name : 'Desconhecido';
+  const gwUrl = gw ? gw.url : 'N/A';
+  return `**Gateway offline ou configuracao necessaria**\n\nO PS Claw nao esta respondendo. Verifique:\n\n1. Execute o PS Claw: \`ps-claw gateway run\`\n2. Va na aba **Gateways** e configure a URL\n3. Adicione seu token se necessario\n4. Selecione um modelo na aba **Modelos**\n\nGateway: ${gwName} (${gwUrl})`;
 }
 
 function sendQuick(text) {
@@ -480,7 +1000,135 @@ function sendQuick(text) {
   sendMessage();
 }
 
-// ─── Utils ────────────────────────────────────────────────────────────────
+// === MODALS ===
+function openModal(type, data) {
+  const content = document.getElementById('modal-content');
+
+  if (type === 'addGateway') {
+    content.innerHTML = `
+      <h2>🔗 Adicionar Gateway</h2>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="m-gw-name" placeholder="Meu Gateway" />
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="text" id="m-gw-url" placeholder="http://localhost:3000/gateway" />
+      </div>
+      <div class="field">
+        <label>Tipo</label>
+        <select id="m-gw-type">
+          <option value="ps-claw">PS Claw</option>
+          <option value="openai">OpenAI Compatible</option>
+          <option value="anthropic">Anthropic Compatible</option>
+          <option value="ollama">Ollama</option>
+          <option value="lmstudio">LM Studio</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Token / API Key (opcional)</label>
+        <input type="password" id="m-gw-token" placeholder="Seu token de autenticacao" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="addGateway()">Adicionar</button>
+      </div>
+    `;
+  } else if (type === 'editGateway') {
+    const gw = cfg.gateways.find(g => g.id === data);
+    if (!gw) return;
+    content.innerHTML = `
+      <h2>✏️ Editar Gateway</h2>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="m-gw-name" value="${escAttr(gw.name)}" />
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="text" id="m-gw-url" value="${escAttr(gw.url)}" />
+      </div>
+      <div class="field">
+        <label>Tipo</label>
+        <select id="m-gw-type">
+          <option value="ps-claw" ${gw.type==='ps-claw'?'selected':''}>PS Claw</option>
+          <option value="openai" ${gw.type==='openai'?'selected':''}>OpenAI Compatible</option>
+          <option value="anthropic" ${gw.type==='anthropic'?'selected':''}>Anthropic Compatible</option>
+          <option value="ollama" ${gw.type==='ollama'?'selected':''}>Ollama</option>
+          <option value="lmstudio" ${gw.type==='lmstudio'?'selected':''}>LM Studio</option>
+          <option value="custom" ${gw.type==='custom'?'selected':''}>Custom</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Token / API Key</label>
+        <input type="password" id="m-gw-token" value="${escAttr(gw.token)}" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="editGateway('${gw.id}')">Salvar</button>
+      </div>
+    `;
+  } else if (type === 'about') {
+    content.innerHTML = `
+      <h2>🦞 Sobre o PS Claw</h2>
+      <p style="margin-bottom:12px;color:var(--text-muted);font-size:14px;line-height:1.7;">
+        PS Claw e um fork leve do OpenClaw — um agente de IA autonomo multi-canal com interface web no estilo ChatGPT.
+      </p>
+      <p style="margin-bottom:12px;color:var(--text-muted);font-size:14px;line-height:1.7;">
+        Use no terminal com <code style="background:var(--input-bg);padding:2px 6px;border-radius:4px;">ps-claw gateway run</code> ou acesse esta interface web para gerenciar gateways, modelos e provedores de API.
+      </p>
+      <div style="background:var(--input-bg);border-radius:8px;padding:12px;font-size:12px;font-family:monospace;color:var(--text-muted);">
+        <div>Comandos uteis:</div>
+        <div style="margin-top:6px;">ps-claw gateway run    # Inicia o gateway</div>
+        <div>ps-claw secrets set    # Configurar chaves</div>
+        <div>ps-claw doctor         # Diagnostico</div>
+        <div>ps-claw configure      # Configurar</div>
+        <div>ps-claw models list    # Listar modelos</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal()">Fechar</button>
+      </div>
+    `;
+  }
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function addGateway() {
+  const name = document.getElementById('m-gw-name').value.trim();
+  const url = document.getElementById('m-gw-url').value.trim();
+  const type = document.getElementById('m-gw-type').value;
+  const token = document.getElementById('m-gw-token').value.trim();
+  if (!name || !url) { showToast('Preencha nome e URL', 'error'); return; }
+  const id = 'gw-' + Date.now();
+  cfg.gateways.push({ id, name, url, type, token, connected: false });
+  saveCfg();
+  renderGatewayList();
+  closeModal();
+  checkAllGateways();
+  showToast('Gateway adicionado: ' + name, 'success');
+}
+
+function editGateway(id) {
+  const gw = cfg.gateways.find(g => g.id === id);
+  if (!gw) return;
+  gw.name = document.getElementById('m-gw-name').value.trim() || gw.name;
+  gw.url = document.getElementById('m-gw-url').value.trim() || gw.url;
+  gw.type = document.getElementById('m-gw-type').value;
+  gw.token = document.getElementById('m-gw-token').value.trim();
+  saveCfg();
+  renderGatewayList();
+  closeModal();
+  checkAllGateways();
+  showToast('Gateway atualizado: ' + gw.name, 'success');
+}
+
+// === UTILS ===
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
@@ -489,7 +1137,10 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 200) + 'px';
 }
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 function formatText(text) {
   if (!text) return '';
@@ -511,24 +1162,17 @@ function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
 }
 
-// ─── Settings ─────────────────────────────────────────────────────────────
-function openSettings() {
-  document.getElementById('cfg-gateway').value = cfg.gateway;
-  document.getElementById('cfg-token').value   = cfg.token;
-  document.getElementById('cfg-name').value    = cfg.name;
-  document.getElementById('settings-overlay').classList.add('open');
-}
-function closeSettings(e) {
-  if (!e || e.target === document.getElementById('settings-overlay'))
-    document.getElementById('settings-overlay').classList.remove('open');
-}
-function saveSettings() {
-  cfg.gateway = document.getElementById('cfg-gateway').value.trim() || 'http://localhost:3000/gateway';
-  cfg.token   = document.getElementById('cfg-token').value.trim();
-  cfg.name    = document.getElementById('cfg-name').value.trim() || 'Você';
+function saveCfg() {
   localStorage.setItem('ps-claw-cfg', JSON.stringify(cfg));
-  document.getElementById('settings-overlay').classList.remove('open');
-  checkGateway();
+}
+
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 </script>
 </body>
