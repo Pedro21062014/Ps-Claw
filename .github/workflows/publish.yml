@@ -6,7 +6,6 @@ on:
       - main
     paths-ignore:
       - 'README.md'
-      - '.gitignore'
 
 jobs:
   publish:
@@ -18,9 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
 
-      - name: Get version info
+      - name: Check version
         id: version
         run: |
           LOCAL=$(node -p "require('./package.json').version")
@@ -29,12 +27,22 @@ jobs:
           echo "remote=$REMOTE" >> $GITHUB_OUTPUT
           echo "📦 Local: v$LOCAL | npm: v$REMOTE"
 
+      - name: Configure npm
+        if: steps.version.outputs.local != steps.version.outputs.remote
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm config set //registry.npmjs.org/:_authToken '${{ secrets.NPM_TOKEN }}'
+          npm config set access public
+
       - name: Publish to npm
         if: steps.version.outputs.local != steps.version.outputs.remote
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+        timeout-minutes: 5
+
+      - name: Success
+        if: steps.version.outputs.local != steps.version.outputs.remote
+        run: echo "✅ v${{ steps.version.outputs.local }} publicado com sucesso!"
 
       - name: Already published
         if: steps.version.outputs.local == steps.version.outputs.remote
-        run: echo "✅ v${{ steps.version.outputs.local }} já publicado"
+        run: echo "✅ v${{ steps.version.outputs.local }} já existe no npm"
