@@ -1,6 +1,6 @@
 {
   "name": "ps-claw",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "PS Claw - AI Agent Gateway with multi-provider support, web UI, and CLI. Lightweight fork of OpenClaw.",
   "keywords": [
     "ai",
@@ -251,7 +251,7 @@
     "postinstall": "echo 'Skipping postinstall'",
     "postpack": "echo 'Skipping postpack'",
     "preinstall": "echo 'Skipping preinstall'",
-    "prepack": "echo 'Skipping prepack \u2014 dist/ already included in files'",
+    "prepack": "echo 'Skipping prepack — dist/ already included in files'",
     "prepare": "echo 'Skipping prepare'",
     "prepush:ci": "bash scripts/prepush-ci.sh",
     "probe:anthropic:prompt": "node --import tsx scripts/anthropic-prompt-probe.ts",
