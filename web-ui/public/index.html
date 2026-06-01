@@ -192,6 +192,22 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
 .bbl th,.bbl td{border:1px solid var(--border2);padding:8px 12px;text-align:left}
 .bbl th{background:var(--surface3);font-weight:700}
 
+/* action tags */
+.act{padding:4px 5px 4px 10px;margin:6px 0 2px;border-radius:8px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:7px;line-height:1.3;word-break:break-word}
+.act-cmd{background:rgba(59,130,246,.12);color:#3b82f6;border-left:3px solid #3b82f6}
+.act-click{background:rgba(139,92,246,.12);color:#8b5cf6;border-left:3px solid #8b5cf6}
+.act-app{background:rgba(16,185,129,.12);color:#10b981;border-left:3px solid #10b981}
+.act-file{background:rgba(245,158,11,.12);color:#f59e0b;border-left:3px solid #f59e0b}
+.act-err{background:rgba(239,68,68,.1);color:#ef4444;border-left:3px solid #ef4444}
+.act-ok{background:rgba(16,185,129,.1);color:#10b981;border-left:3px solid #10b981}
+.act::before{font-size:13px}
+.act-cmd::before{content:'💻'}
+.act-click::before{content:'🖱️'}
+.act-app::before{content:'📂'}
+.act-file::before{content:'📄'}
+.act-err::before{content:'❌'}
+.act-ok::before{content:'✅'}
+
 /* typing */
 .typing{display:flex;gap:4px;align-items:center;padding:14px 16px}
 .typing span{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite}
@@ -556,7 +572,7 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
         <h3>💬 Comportamento</h3>
         <div class="field">
           <label>System prompt</label>
-          <textarea id="cfg-sys" placeholder="Você é um assistente de IA útil e direto." oninput="saveCfg()"></textarea>
+          <textarea id="cfg-sys" placeholder="Você é a PS Claw, assistente de IA com acesso a ferramentas e ações executáveis no computador do usuário. Você pode: executar comandos no terminal/shell do sistema, dar cliques na tela e controlar o mouse, abrir aplicativos e programas, manipular arquivos e pastas. Sempre informe o que está executando e o resultado obtido. Seja direta, útil e proativa." oninput="saveCfg()"></textarea>
         </div>
         <div class="row">
           <div class="field">
@@ -683,6 +699,12 @@ function renderChatList(){
       <button class="ci-del" onclick="deleteChat('${c.id}',event)">✕</button>
     </div>`).join('');
 }
+function parseMsg(text){
+ var lines=text.split('\n');var parts=[];var buf=[];
+ var flush=function(){if(!buf.length)return;var raw=buf.join('\n').trim();buf.length=0;if(!raw)return;var cls='act-cmd';var lo=raw.toLowerCase();if(/\b(click|clique|mouse|botao|botão|right.?click|duplo|dblclick|scroll|arrastar|drag)\b/.test(lo))cls='act-click';else if(/\b(abrir|open|launch|start|iniciar|executar app|\.exe|notepad|calc|chrome|firefox|edge|explorer)\b/.test(lo))cls='act-app';else if(/\b(arquivo|file|criar|deletar|remover|delete|salvar|save|mover|move|copiar|copy|mkdir)\b/.test(lo))cls='act-file';else if(/^(erro|error|falha|failed|exception|traceback|fatal)/i.test(lo))cls='act-err';else if(/^(ok|sucesso|success|concluído|concluido|feito|done|pronto)/i.test(lo))cls='act-ok';parts.push({type:'action',text:raw,cls});};
+ for(var i=0;i<lines.length;i++){var trimmed=lines[i].trim();if(!trimmed||trimmed.charAt(0)=='-'||trimmed.charAt(0)=='*'||trimmed.charAt(0)=='#'||trimmed.indexOf('\`\`\`')===0){buf.push(lines[i]);continue;}var isAct=/^(> |\$ |❯|▶|\$|PS |C:|D:)/.test(trimmed)||/^(Executando|Running |Abrindo|Opening |Exec)/.test(trimmed)||/^(npm |pip |python |node |git |ls |cd |mkdir |rm |cat |open |start |launch |echo |mv |cp |touch |chmod |docker |kubectl |make )/i.test(trimmed);if(isAct){flush();buf.push(lines[i]);}else buf.push(lines[i]);}flush();if(!parts.length&&text.trim())parts.push({type:'text',text});return parts;
+}
+
 function renderMsgs(){
   const box=document.getElementById('messages');
   if(!curChat||!curChat.msgs.length){
@@ -699,13 +721,7 @@ function renderMsgs(){
     </div>`;
     return;
   }
-  box.innerHTML=curChat.msgs.map(m=>`
-    <div class="msg-row ${m.role==='user'?'user':''}">
-      <div class="av ${m.role==='user'?'user':'ai'}">${m.role==='user'?(S.cfg.name||'V')[0].toUpperCase():'🦞'}</div>
-      <div class="bbl ${m.role==='user'?'user':'ai'}">${fmt(m.content)}</div>
-    </div>`).join('');
-  box.scrollTop=box.scrollHeight;
-}
+  box.innerHTML=curChat.msgs.map(function(m){var body="";if(m.role==="user"){body="<div class=\"bbl user\">"+fmt(m.content)+"</div>";}else{var parts=parseMsg(m.content||"");body=parts.map(function(p){if(p.type==="text")return fmt(p.text);return "<div class=\"act "+p.cls+"\">"+fmt(p.text)+"</div>";}).join("");body="<div class=\"bbl ai\">"+body+"</div>";}return "<div class=\"msg-row "+(m.role==="user"?"user":"")+"\">\n <div class=\\"av \"+(m.role==="user"?"user":"ai")+"\">"+(m.role==="user"?(S.cfg.name||"V")[0].toUpperCase():"🦞")+"</div>\n "+body+"</div>";}).join("");box.scrollTop=box.scrollHeight;}
 function addTyping(){
   const box=document.getElementById('messages');
   document.getElementById('welcome')?.remove();
@@ -756,7 +772,7 @@ async function sendMsg(){
 async function callApi(model, text, key){
   const history = curChat.msgs.slice(0,-1).map(m=>({role:m.role,content:m.content}));
   const messages = [...history, {role:'user',content:text}];
-  const sys = S.cfg.sys || 'Você é um assistente de IA útil e direto.';
+  const sys = S.cfg.sys || 'Você é a PS Claw, uma assistente de IA inteligente e prestativa. Você tem acesso a ferramentas poderosas e pode executar ações no computador do usuário, incluindo: executar comandos no terminal/shell do sistema, dar cliques na tela e controlar o mouse, abrir aplicativos e programas, e manipular arquivos. Sempre que executar uma dessas ações, explique o que está fazendo e informe o resultado. Seja direta, útil e proativa.';
   const temp = parseFloat(S.cfg.temp)||0.7;
   const maxTok = parseInt(S.cfg.tok)||4096;
 
