@@ -20,12 +20,45 @@ npx ps-claw@latest web
 
 Pronto! A interface web abre em **http://localhost:3000** 🎉
 
+No **primeiro uso** (web ou terminal), o PS Claw abre o **Quickstart guiado** — você escolhe o provedor (Google Gemini é grátis), cola a API key, testa, escolhe o modelo e está pronto para conversar.
+
+---
+
+## 💻 Conversar pelo terminal
+
+O PS Claw agora tem **chat no terminal** — não precisa mais só da interface web!
+
+```bash
+# Quickstart guiado (primeiro uso, ou para reconfigurar)
+npx ps-claw quickstart
+
+# Conversar direto no terminal
+npx ps-claw chat
+
+# Ver modelos disponíveis
+npx ps-claw models
+
+# Ver configuração atual
+npx ps-claw config
+```
+
+### Comandos dentro do `chat`
+
+| Comando | Ação |
+|---------|------|
+| `/ajuda` | Lista os comandos |
+| `/sair` | Encerra o chat |
+| `/limpar` | Limpa o histórico |
+| `/modelo` | Lista os modelos |
+
+Config salva em `~/.ps-claw/config.json`.
+
 ---
 
 ## 🌐 Interface Web
 
 ### O que é?
-Interface visual estilo ChatGPT para conversar com o agente de IA. Salva histórico no navegador, permite trocar modelos, configurar gateways.
+Interface visual estilo ChatGPT para conversar com o agente de IA. Salva histórico no navegador, permite trocar modelos, configurar gateways, instalar plugins da **Loja Claw Hub** e rodar tarefas com **Browser Use**.
 
 ### Como usar?
 
@@ -39,24 +72,60 @@ npx ps-claw all
 
 Acesse: **http://localhost:3000**
 
+### Abas da interface
+
+| Aba | Função |
+|-----|--------|
+| 💬 **Chat** | Conversa com a IA, histórico persistente |
+| 🔑 **API Keys** | Configure suas chaves (Anthropic, OpenAI, Google, Mistral) |
+| 🤖 **Modelos** | Selecione o modelo padrão |
+| 🛒 **Loja** | Catálogo do Claw Hub — instale MCPs, plugins e skills com 1 clique |
+| 🌐 **Browser** | Integração Browser Use — IA controla o navegador |
+| 🔌 **Gateways** | Conecte a gateways externos (opcional) |
+| ⚙️ **Config** | Ajustes de perfil, system prompt, temperatura, etc. |
+
 ### Configuração na interface
 
-1. Vá para a aba **🔌 Gateways**
-   - Clique **+ Adicionar**
-   - URL: `http://localhost:18789` (PS Claw local) ou qualquer API OpenAI-compatível
-   - Nome: "Meu Gateway"
-   - Clique **Adicionar**
+1. O **Quickstart** aparece automaticamente no primeiro uso — basta seguir os passos.
+2. Ou configure manualmente:
+   - Aba **🔑 API Keys** → cole sua chave
+   - Aba **🤖 Modelos** → clique no modelo desejado
+   - Aba **💬 Chat** → comece a conversar!
 
-2. Vá para a aba **🤖 Modelos & Provedores**
-   - Adicione suas **chaves de API**:
-     - **Claude** (Anthropic): `sk-ant-...`
-     - **GPT-4** (OpenAI): `sk-...`
-     - **Gemini** (Google): `AIza...`
-     - **Mistral**: sua chave
-   - Selecione um modelo
-   - Clique no modelo para usá-lo
+---
 
-3. Volte para **💬 Chat** e comece a conversar! 💬
+## 🛒 Loja Claw Hub
+
+A aba **🛒 Loja** é uma loja estilo Play Store com **plugins, MCPs e skills** curados do ecossistema Claw Hub. Com 1 clique você instala:
+
+- **🌐 Automação** — Browser Use, Playwright MCP, Puppeteer MCP
+- **🧠 Memória** — Memory Server, SQLite, Chroma
+- **📁 Documentos** — Filesystem, GitHub, GitLab, Notion
+- **🔎 Busca** — Brave Search, Fetch, Tavily
+- **💼 Produtividade** — Google Drive, Slack, Gmail
+- **🐳 DevOps** — Docker, PostgreSQL
+- **🤖 IA** — Ollama Local, OpenRouter, LM Studio
+- **🎙️ Mídia** — Whisper, YouTube
+- **💻 Skills** — Coder Pro, Writer, Data Analyst, Translator
+
+Cada plugin tem **ícone, descrição, rating, número de downloads** e botão **⬇️ Instalar**. A instalação roda `npm install -g`, `pip install --user` ou cria uma skill local — tudo automático.
+
+---
+
+## 🌐 Browser Use
+
+A aba **🌐 Browser** integra a biblioteca [browser-use](https://github.com/browser-use/browser-use) — a IA controla um navegador real para executar tarefas:
+
+1. Clique em **⬇️ Instalar Browser Use** (instala `browser-use` + `playwright` via pip)
+2. Digite a **URL inicial** (opcional) e a **tarefa em linguagem natural**
+3. Clique em **▶️ Executar Tarefa**
+
+**Exemplos de tarefas:**
+- "Liste as 5 notícias mais populares do Hacker News"
+- "Pesquise por 'PS Claw AI agent' e liste os 3 primeiros resultados"
+- "Vá em GitHub Trending e liste os 5 repositórios do dia"
+
+> Requer API key da OpenAI configurada (browser-use usa LangChain por padrão).
 
 ---
 

@@ -350,7 +350,112 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
   #sidebar.open{transform:none}
   #menu-btn{display:flex}
   .model-grid{grid-template-columns:1fr 1fr}
+  .store-grid{grid-template-columns:1fr 1fr !important}
+  #tabs{overflow-x:auto}
 }
+
+/* ── STORE (Play Store-like) ── */
+.store-banner{
+  background:linear-gradient(135deg,var(--acc3) 0%,var(--acc) 50%,#9b8fff 100%);
+  border-radius:var(--rad);padding:28px 32px;margin-bottom:20px;
+  display:flex;align-items:center;gap:24px;color:#fff;
+  box-shadow:0 8px 32px rgba(124,106,247,.3);position:relative;overflow:hidden
+}
+.store-banner::after{
+  content:'🦞';position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  font-size:90px;opacity:.18
+}
+.store-banner h2{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
+.store-banner p{font-size:13px;opacity:.9;max-width:560px;line-height:1.6}
+.store-toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+#store-search{
+  width:100%;padding:11px 16px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rad-sm);color:var(--txt);font-size:14px;outline:none;
+  font-family:'Syne',sans-serif;transition:border-color .15s
+}
+#store-search:focus{border-color:var(--acc)}
+.store-cats{display:flex;gap:8px;flex-wrap:wrap}
+.store-cat{
+  padding:6px 14px;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--txt3);cursor:pointer;font-size:12px;font-weight:700;
+  transition:all .15s;font-family:'Syne',sans-serif
+}
+.store-cat:hover{color:var(--txt2);border-color:var(--border2)}
+.store-cat.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.store-section-title{
+  font-size:16px;font-weight:800;margin:20px 0 14px;letter-spacing:-.3px;
+  display:flex;align-items:center;gap:8px
+}
+.store-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;margin-bottom:24px
+}
+.store-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rad);padding:16px;cursor:pointer;
+  transition:all .2s;display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden
+}
+.store-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.store-card.installed{border-color:rgba(34,201,138,.4)}
+.store-card-head{display:flex;align-items:center;gap:10px}
+.store-icon{
+  width:42px;height:42px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--surface3),var(--surface));
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  border:1px solid var(--border2)
+}
+.store-card.featured .store-icon{background:linear-gradient(135deg,var(--acc3),var(--acc));border-color:transparent}
+.store-name{font-size:14px;font-weight:700;line-height:1.2}
+.store-cat-tag{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.store-desc{font-size:12px;color:var(--txt2);line-height:1.55;flex:1;min-height:36px}
+.store-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--txt3);margin-top:4px}
+.store-rating{display:flex;align-items:center;gap:3px;color:var(--yellow);font-weight:700}
+.store-installed-badge{
+  position:absolute;top:10px;right:10px;
+  background:rgba(34,201,138,.15);color:var(--green);
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px
+}
+.store-actions{display:flex;gap:6px;margin-top:6px}
+.store-actions .btn{flex:1}
+.store-empty{text-align:center;padding:40px 20px;color:var(--txt3)}
+.store-empty-icon{font-size:48px;margin-bottom:12px}
+
+/* ── QUICKSTART MODAL ── */
+#qs-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;
+  align-items:center;justify-content:center;backdrop-filter:blur(8px)
+}
+#qs-bg.open{display:flex}
+#qs-modal{
+  background:var(--surface);border:1px solid var(--border2);border-radius:var(--rad);
+  padding:32px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.6)
+}
+#qs-modal h2{font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:-.4px}
+#qs-modal .qs-sub{font-size:13px;color:var(--txt2);margin-bottom:24px;line-height:1.6}
+.qs-step{font-size:11px;color:var(--acc2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.qs-provs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.qs-prov{
+  padding:14px;background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:var(--rad-sm);cursor:pointer;transition:all .15s;text-align:left;
+  font-family:'Syne',sans-serif;color:var(--txt);font-size:13px;font-weight:600
+}
+.qs-prov:hover{border-color:var(--border2)}
+.qs-prov.sel{border-color:var(--acc);background:rgba(124,106,247,.08)}
+.qs-prov .qs-prov-name{display:block;font-size:14px;margin-bottom:3px}
+.qs-prov .qs-prov-desc{font-size:11px;color:var(--txt3);font-weight:500}
+.qs-final{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rad-sm);padding:16px;margin-top:14px}
+.qs-final-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)}
+.qs-final-row:last-child{border:none}
+
+/* ── BROWSER USE ── */
+.bu-status-ok{background:rgba(34,201,138,.08);border:1px solid rgba(34,201,138,.3);color:var(--green);padding:12px 16px;border-radius:var(--rad-sm);font-size:13px;font-weight:600}
+.bu-status-warn{background:rgba(240,160,72,.08);border:1px solid rgba(240,160,72,.3);color:var(--orange);padding:12px 16px;border-radius:var(--rad-sm);font-size:13px;font-weight:600}
+.bu-status-err{background:rgba(240,90,90,.08);border:1px solid rgba(240,90,90,.3);color:var(--red);padding:12px 16px;border-radius:var(--rad-sm);font-size:13px;font-weight:600}
+.bu-result-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--rad-sm);padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;white-space:pre-wrap;max-height:400px;overflow-y:auto;color:var(--txt);line-height:1.6}
+.bu-result-err{background:rgba(240,90,90,.08);border:1px solid rgba(240,90,90,.3);color:var(--red)}
+
 </style>
 </head>
 <body>
@@ -396,6 +501,8 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
     <div class="tab active" data-t="chat" onclick="goTab('chat')">💬 Chat</div>
     <div class="tab" data-t="keys" onclick="goTab('keys')">🔑 API Keys</div>
     <div class="tab" data-t="models" onclick="goTab('models')">🤖 Modelos</div>
+    <div class="tab" data-t="store" onclick="goTab('store')">🛒 Loja</div>
+    <div class="tab" data-t="browser" onclick="goTab('browser')">🌐 Browser</div>
     <div class="tab" data-t="gateways" onclick="goTab('gateways')">🔌 Gateways</div>
     <div class="tab" data-t="settings" onclick="goTab('settings')">⚙️ Config</div>
   </div>
@@ -595,6 +702,80 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
       </div>
     </div>
   </div>
+
+  <!-- STORE (Play Store-like) -->
+  <div class="page" id="store-page">
+    <div class="page-inner" style="max-width:1100px">
+      <div class="sp-header">
+        <div class="sp-title">🛒 Loja PS Claw</div>
+        <div class="sp-sub">Catálogo do <strong style="color:var(--acc2)">Claw Hub</strong> — instale plugins, MCPs, skills e integrações com 1 clique. Tudo baixado direto do dashboard.</div>
+      </div>
+
+      <!-- banner de destaque -->
+      <div id="store-banner" class="store-banner"></div>
+
+      <!-- search + filtros -->
+      <div class="store-toolbar">
+        <input id="store-search" type="text" placeholder="🔎 Buscar plugins..." oninput="renderStore()"/>
+        <div id="store-cats" class="store-cats"></div>
+      </div>
+
+      <!-- seção: Em Destaque -->
+      <h3 class="store-section-title">⭐ Em Destaque</h3>
+      <div id="store-featured" class="store-grid"></div>
+
+      <!-- seção: Todos -->
+      <h3 class="store-section-title">📦 Todos os Plugins</h3>
+      <div id="store-all" class="store-grid"></div>
+    </div>
+  </div>
+
+  <!-- BROWSER USE -->
+  <div class="page" id="browser-page">
+    <div class="page-inner" style="max-width:900px">
+      <div class="sp-header">
+        <div class="sp-title">🌐 Browser Use</div>
+        <div class="sp-sub">Controle um navegador por IA: diga o que quer fazer e a IA abre o site, clica, preenche formulários e extrai dados automaticamente.</div>
+      </div>
+
+      <div class="card" id="bu-status-card">
+        <h3>📋 Status da Integração</h3>
+        <div id="bu-status-content"><p style="color:var(--txt2)">Verificando...</p></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="buInstall()">⬇️ Instalar Browser Use</button>
+          <button class="btn btn-ghost" onclick="buStatus()">🔄 Re-verificar</button>
+          <a class="btn btn-ghost" href="https://github.com/browser-use/browser-use" target="_blank" style="text-decoration:none">📖 Documentação</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🤖 Rodar Tarefa no Browser</h3>
+        <div class="field">
+          <label>URL inicial (opcional)</label>
+          <input type="text" id="bu-url" placeholder="https://exemplo.com"/>
+        </div>
+        <div class="field">
+          <label>Tarefa em linguagem natural</label>
+          <textarea id="bu-task" placeholder="Ex: Acesse o site, faça login com user admin e senha 1234, depois baixe o relatório de vendas do mês passado." style="min-height:100px"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-primary" onclick="buRun()">▶️ Executar Tarefa</button>
+          <span id="bu-run-status" style="font-size:12px;color:var(--txt3)"></span>
+        </div>
+        <div id="bu-result" style="margin-top:14px"></div>
+      </div>
+
+      <div class="card">
+        <h3>💡 Exemplos de Tarefas</h3>
+        <div class="chips" style="justify-content:flex-start">
+          <div class="chip" onclick="document.getElementById('bu-url').value='https://news.ycombinator.com';document.getElementById('bu-task').value='Liste as 5 notícias mais populares da página inicial com título e link.'">📋 Extrair notícias</div>
+          <div class="chip" onclick="document.getElementById('bu-url').value='https://google.com';document.getElementById('bu-task').value='Pesquise por \"PS Claw AI agent\" e liste os 3 primeiros resultados com título e URL.'">🔎 Pesquisar no Google</div>
+          <div class="chip" onclick="document.getElementById('bu-url').value='';document.getElementById('bu-task').value='Acesse amazon.com e encontre os 5 livros mais vendidos de tecnologia esta semana.'">📚 Top produtos</div>
+          <div class="chip" onclick="document.getElementById('bu-url').value='https://github.com';document.getElementById('bu-task').value='Vá em trending, liste os 5 repositórios mais populares do dia com nome, linguagem e estrelas.'">📊 GitHub Trending</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div><!-- /main -->
 
 <!-- MODAL ADD GATEWAY -->
@@ -607,6 +788,64 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--txt);display
     <div class="modal-acts">
       <button class="btn btn-ghost" onclick="closeMod()">Cancelar</button>
       <button class="btn btn-primary" onclick="addGw()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICKSTART MODAL (primeiro uso) -->
+<div id="qs-bg">
+  <div id="qs-modal">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:48px;margin-bottom:6px">🦞</div>
+      <h2>Bem-vindo ao PS Claw!</h2>
+      <div class="qs-sub">Vamos configurar tudo em menos de 1 minuto. Você só precisa de <strong style="color:var(--acc2)">uma</strong> API key.</div>
+    </div>
+
+    <div class="qs-step">Passo 1 — Escolha o provedor</div>
+    <div class="qs-provs" id="qs-provs">
+      <button class="qs-prov sel" data-p="google" onclick="qsSelProv('google')">
+        <span class="qs-prov-name">🔵 Google Gemini</span>
+        <span class="qs-prov-desc">Grátis para sempre · recomendado</span>
+      </button>
+      <button class="qs-prov" data-p="anthropic" onclick="qsSelProv('anthropic')">
+        <span class="qs-prov-name">🟠 Anthropic Claude</span>
+        <span class="qs-prov-desc">US$5 de crédito inicial</span>
+      </button>
+      <button class="qs-prov" data-p="openai" onclick="qsSelProv('openai')">
+        <span class="qs-prov-name">🟢 OpenAI GPT-4o</span>
+        <span class="qs-prov-desc">US$5 de crédito inicial</span>
+      </button>
+      <button class="qs-prov" data-p="mistral" onclick="qsSelProv('mistral')">
+        <span class="qs-prov-name">🟣 Mistral</span>
+        <span class="qs-prov-desc">Trial de crédito · Europa</span>
+      </button>
+    </div>
+
+    <div class="qs-step">Passo 2 — Cole sua API Key</div>
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="qs-key" placeholder="Cole aqui..." oninput="qsClearTest()"/>
+      <div style="font-size:11px;color:var(--txt3);margin-top:6px" id="qs-key-hint">
+        Obtenha grátis em: <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--acc2)">aistudio.google.com/apikey</a>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="qsTestKey()">🔍 Testar chave</button>
+    <span id="qs-test-result" style="font-size:12px;margin-left:10px"></span>
+
+    <div class="qs-step" style="margin-top:18px">Passo 3 — Modelo padrão</div>
+    <div class="field">
+      <select id="qs-model"></select>
+    </div>
+
+    <div class="qs-step" style="margin-top:18px">Passo 4 — Perfil (opcional)</div>
+    <div class="row">
+      <div class="field"><label>Seu nome</label><input type="text" id="qs-name" placeholder="Você"/></div>
+      <div class="field"><label>Nome do agente</label><input type="text" id="qs-agent" placeholder="PS Claw"/></div>
+    </div>
+
+    <div class="modal-acts" style="margin-top:24px">
+      <button class="btn btn-ghost" onclick="closeQs()">Pular por agora</button>
+      <button class="btn btn-primary" onclick="qsFinish()">✅ Finalizar e conversar</button>
     </div>
   </div>
 </div>
@@ -669,11 +908,13 @@ function goTab(t){
   document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('active',e.dataset.t===t));
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
   document.getElementById(t+'-page').classList.add('active');
-  document.getElementById('tb-title').textContent={chat:'Chat',keys:'API Keys',models:'Modelos',gateways:'Gateways',settings:'Configurações'}[t]||t;
+  document.getElementById('tb-title').textContent={chat:'Chat',keys:'API Keys',models:'Modelos',store:'Loja',browser:'Browser Use',gateways:'Gateways',settings:'Configurações'}[t]||t;
   if(t==='models')   renderModels();
   if(t==='gateways') renderGws();
   if(t==='keys')     loadKeys();
   if(t==='settings') loadCfg();
+  if(t==='store')    loadStore();
+  if(t==='browser')  buStatus();
 }
 
 // ─── CHAT ─────────────────────────────────────────────────────────────────
@@ -1048,11 +1289,264 @@ function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrol
 function sendQ(t){document.getElementById('msg-in').value=t;goTab('chat');sendMsg();}
 function toggleSb(){document.getElementById('sidebar').classList.toggle('open');}
 
+// ─── QUICKSTART (primeiro uso) ─────────────────────────────────────────────
+let qsProv = 'google';
+const QS_LINKS = {
+  google:'https://aistudio.google.com/apikey',
+  anthropic:'https://console.anthropic.com/api-keys',
+  openai:'https://platform.openai.com/api-keys',
+  mistral:'https://console.mistral.ai/api-keys',
+};
+const QS_PH = {
+  google:'AIzaSy...',
+  anthropic:'sk-ant-api03-...',
+  openai:'sk-proj-...',
+  mistral:'...',
+};
+function qsSelProv(p){
+  qsProv = p;
+  document.querySelectorAll('.qs-prov').forEach(b => b.classList.toggle('sel', b.dataset.p === p));
+  // atualiza hint
+  document.getElementById('qs-key-hint').innerHTML =
+    `Obtenha em: <a href="${QS_LINKS[p]}" target="_blank" style="color:var(--acc2)">${QS_LINKS[p].replace('https://','')}</a>`;
+  document.getElementById('qs-key').placeholder = QS_PH[p];
+  qsClearTest();
+  // atualiza lista de modelos
+  const sel = document.getElementById('qs-model');
+  const models = MODELS.filter(m => m.p === p);
+  sel.innerHTML = models.map(m => `<option value="${m.id}">${m.name} — ${m.desc}</option>`).join('');
+}
+function qsClearTest(){
+  const r = document.getElementById('qs-test-result');
+  r.textContent = '';
+  r.style.color = 'var(--txt3)';
+}
+async function qsTestKey(){
+  const key = document.getElementById('qs-key').value.trim();
+  const r = document.getElementById('qs-test-result');
+  if (!key){ r.textContent='⚠️ Cole a chave primeiro'; r.style.color='var(--orange)'; return; }
+  r.textContent = '🔍 Testando...'; r.style.color = 'var(--txt3)';
+  try {
+    let ok = false;
+    if (qsProv === 'anthropic') {
+      const x = await fetch(px('https://api.anthropic.com/v1/models'), { headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' } });
+      ok = x.ok;
+    } else if (qsProv === 'openai') {
+      const x = await fetch(px('https://api.openai.com/v1/models'), { headers: { Authorization: 'Bearer ' + key } });
+      ok = x.ok;
+    } else if (qsProv === 'google') {
+      const x = await fetch(px(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`));
+      ok = x.ok;
+    } else if (qsProv === 'mistral') {
+      const x = await fetch(px('https://api.mistral.ai/v1/models'), { headers: { Authorization: 'Bearer ' + key } });
+      ok = x.ok;
+    }
+    if (ok) { r.textContent = '✅ Chave válida!'; r.style.color = 'var(--green)'; }
+    else    { r.textContent = '❌ Chave inválida ou erro'; r.style.color = 'var(--red)'; }
+  } catch (e) {
+    r.textContent = '❌ ' + e.message; r.style.color = 'var(--red)';
+  }
+}
+function openQs(){ document.getElementById('qs-bg').classList.add('open'); qsSelProv('google'); }
+function closeQs(){ document.getElementById('qs-bg').classList.remove('open'); }
+function qsFinish(){
+  const key = document.getElementById('qs-key').value.trim();
+  if (!key) { toast('⚠️ Cole sua API key'); return; }
+  const model = document.getElementById('qs-model').value;
+  const name = document.getElementById('qs-name').value.trim() || 'Você';
+  const agent = document.getElementById('qs-agent').value.trim() || 'PS Claw';
+  S.keys[qsProv] = key;
+  S.model = model;
+  S.cfg.name = name;
+  S.cfg.agent = agent;
+  S.onboarded = true;
+  save();
+  updateStatus();
+  const m = MODELS.find(x => x.id === model);
+  if (m) document.getElementById('model-name-badge').textContent = m.name;
+  closeQs();
+  toast('🎉 PS Claw configurado! Pode conversar.');
+  goTab('chat');
+}
+
+// ─── STORE (Claw Hub catalog) ──────────────────────────────────────────────
+let storeData = null;
+let storeCatFilter = 'all';
+let storeBusy = {};
+
+async function loadStore(){
+  try {
+    const r = await fetch('/api/store');
+    storeData = await r.json();
+  } catch {
+    storeData = { plugins: [], featured: [], categories: [] };
+  }
+  renderStore();
+}
+
+function renderStore(){
+  if (!storeData) return;
+  // banner
+  const banner = document.getElementById('store-banner');
+  const instCount = storeData.plugins.filter(p => p.installed).length;
+  banner.innerHTML = `
+    <div style="position:relative;z-index:1;flex:1">
+      <h2>🛒 Claw Hub — Loja de Plugins</h2>
+      <p>${storeData.plugins.length} plugins disponíveis · ${storeData.categories.length} categorias · ${instCount} instalados.<br>
+      Instale MCPs, integrações e skills com 1 clique — tudo baixado direto do dashboard.</p>
+    </div>`;
+  // categorias
+  const cats = document.getElementById('store-cats');
+  cats.innerHTML = `<button class="store-cat ${storeCatFilter==='all'?'on':''}" onclick="storeSetCat('all')">Todos</button>` +
+    storeData.categories.map(c => `<button class="store-cat ${storeCatFilter===c?'on':''}" onclick="storeSetCat('${c}')">${h(c)}</button>`).join('');
+
+  const search = (document.getElementById('store-search')?.value || '').toLowerCase();
+  const filterFn = p => {
+    if (storeCatFilter !== 'all' && p.category !== storeCatFilter) return false;
+    if (search && !(p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search) || p.category.toLowerCase().includes(search))) return false;
+    return true;
+  };
+
+  // featured
+  const featured = storeData.featured.filter(filterFn);
+  document.getElementById('store-featured').innerHTML = featured.length
+    ? featured.map(p => storeCardHTML(p, true)).join('')
+    : `<div class="store-empty" style="grid-column:1/-1"><div class="store-empty-icon">🔍</div>Nenhum plugin em destaque corresponde à busca.</div>`;
+
+  // all
+  const all = storeData.plugins.filter(filterFn);
+  document.getElementById('store-all').innerHTML = all.length
+    ? all.map(p => storeCardHTML(p, false)).join('')
+    : `<div class="store-empty" style="grid-column:1/-1"><div class="store-empty-icon">📦</div>Nenhum plugin encontrado.</div>`;
+}
+
+function storeSetCat(c){ storeCatFilter = c; renderStore(); }
+
+function storeCardHTML(p, featured){
+  return `
+    <div class="store-card ${featured?'featured':''} ${p.installed?'installed':''}">
+      ${p.installed ? '<span class="store-installed-badge">✓ instalado</span>' : ''}
+      <div class="store-card-head">
+        <div class="store-icon">${p.icon || '📦'}</div>
+        <div style="flex:1;min-width:0">
+          <div class="store-name">${h(p.name)}</div>
+          <div class="store-cat-tag">${h(p.category)}</div>
+        </div>
+      </div>
+      <div class="store-desc">${h(p.desc)}</div>
+      <div class="store-meta">
+        <span class="store-rating">★ ${p.rating || '—'}</span>
+        <span>${h(p.downloads || '')} downloads</span>
+      </div>
+      <div class="store-actions">
+        ${p.installed
+          ? `<button class="btn btn-ghost btn-sm" onclick="storeUninst('${p.id}')">🗑️ Remover</button>`
+          : `<button class="btn btn-primary btn-sm" id="store-btn-${p.id}" onclick="storeInstall('${p.id}')">⬇️ Instalar</button>`}
+        <a class="btn btn-ghost btn-sm" href="${p.homepage || '#'}" target="_blank" style="text-decoration:none;text-align:center">🔗</a>
+      </div>
+    </div>`;
+}
+
+async function storeInstall(id){
+  const btn = document.getElementById('store-btn-' + id);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Instalando...'; }
+  toast('⬇️ Instalando plugin... pode levar alguns segundos', 4000);
+  try {
+    const r = await fetch('/api/store/install', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      toast('✅ ' + data.message);
+      await loadStore();
+    } else {
+      toast('❌ ' + (data.message || 'Falha'));
+      if (btn) { btn.disabled = false; btn.textContent = '⬇️ Instalar'; }
+    }
+  } catch (e) {
+    toast('❌ Erro: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = '⬇️ Instalar'; }
+  }
+}
+
+async function storeUninst(id){
+  if (!confirm('Remover plugin?')) return;
+  try {
+    const r = await fetch('/api/store/uninstall', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    const data = await r.json();
+    toast(data.ok ? '🗑️ ' + data.message : '❌ ' + data.message);
+    await loadStore();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+// ─── BROWSER USE ───────────────────────────────────────────────────────────
+async function buStatus(){
+  const el = document.getElementById('bu-status-content');
+  el.innerHTML = '<p style="color:var(--txt2)">Verificando...</p>';
+  try {
+    const r = await fetch('/api/browser-use/status');
+    const d = await r.json();
+    if (d.ready) {
+      el.innerHTML = `<div class="bu-status-ok">✅ ${d.message}</div>`;
+    } else if (d.installed === false) {
+      el.innerHTML = `<div class="bu-status-warn">⚠️ ${d.message}</div>`;
+    } else {
+      el.innerHTML = `<div class="bu-status-err">❌ ${d.message}</div>`;
+    }
+  } catch (e) {
+    el.innerHTML = `<div class="bu-status-err">❌ Erro ao verificar: ${e.message}</div>`;
+  }
+}
+
+async function buInstall(){
+  toast('⬇️ Instalando browser-use + playwright (pode levar 1-2 min)...', 5000);
+  try {
+    const r = await fetch('/api/browser-use/install', { method: 'POST' });
+    const d = await r.json();
+    toast(d.ok ? '✅ ' + d.message : '❌ ' + d.message, 5000);
+    buStatus();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+async function buRun(){
+  const task = document.getElementById('bu-task').value.trim();
+  const url  = document.getElementById('bu-url').value.trim();
+  const statusEl = document.getElementById('bu-run-status');
+  const resultEl = document.getElementById('bu-result');
+  if (!task) { toast('⚠️ Descreva a tarefa'); return; }
+  statusEl.textContent = '⏳ Executando... pode levar 1-2 minutos';
+  resultEl.innerHTML = '<div class="bu-result-box">⏳ Aguardando IA terminar a tarefa no browser...</div>';
+  try {
+    const r = await fetch('/api/browser-use/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task, url }),
+    });
+    const d = await r.json();
+    statusEl.textContent = d.ok ? '✅ Concluído' : '❌ Falhou';
+    resultEl.innerHTML = `<div class="bu-result-box ${d.ok?'':'bu-result-err'}">${h(d.message || 'Sem resposta')}</div>`;
+  } catch (e) {
+    statusEl.textContent = '❌ Erro';
+    resultEl.innerHTML = `<div class="bu-result-box bu-result-err">❌ ${h(e.message)}</div>`;
+  }
+}
+
 // ─── BOOT ─────────────────────────────────────────────────────────────────
 renderChatList();renderMsgs();updateStatus();
 const bm=MODELS.find(m=>m.id===S.model);
 if(bm)document.getElementById('model-name-badge').textContent=bm.name;
 loadKeys();
+
+// Quickstart no primeiro uso (web)
+if (!S.onboarded && !S.model && !Object.values(S.keys||{}).some(Boolean)) {
+  setTimeout(() => openQs(), 500);
+}
 </script>
 </body>
 </html>
