@@ -989,19 +989,53 @@ const MODELS = [
 ];
 
 // ─── ESTADO ───────────────────────────────────────────────────────────────
-let S = JSON.parse(localStorage.getItem('psc2') || '{}');
-S.chats    = S.chats    || [];
-S.model    = S.model    || null;
-S.gws      = S.gws      || [];
-S.activeGw = S.activeGw || null;
-S.keys     = S.keys     || {anthropic:'',openai:'',google:'',mistral:''};
-S.cfg      = S.cfg      || {name:'Você',agent:'PS Claw',sys:'',temp:'0.7',tok:'4096'};
+// Sanitização robusta: se o localStorage tiver um estado antigo/corrompido
+// (tipos errados, schema mudado), recria os campos com defaults seguros.
+// Isso evita que cliques pareçam "mortos" quando o estado antigo quebra o JS.
+function loadState(){
+  let parsed = {};
+  try {
+    const raw = localStorage.getItem('psc2');
+    if (raw) parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) parsed = {};
+  } catch {
+    parsed = {}; // JSON inválido → começa do zero
+  }
+  // Validação campo a campo
+  const arr = v => Array.isArray(v) ? v : [];
+  const obj = v => (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+  const str = v => (typeof v === 'string') ? v : '';
+  const num = (v, d) => ((typeof v === 'number' && !isNaN(v)) ? String(v) : d);
+
+  const S = {
+    chats:     arr(parsed.chats).map(c => (c && typeof c === 'object' ? c : null)).filter(Boolean),
+    model:     (typeof parsed.model === 'string' && parsed.model) ? parsed.model : null,
+    gws:       arr(parsed.gws).filter(g => g && typeof g === 'object'),
+    activeGw:  (typeof parsed.activeGw === 'string' ? parsed.activeGw : null),
+    onboarded: !!parsed.onboarded,
+    keys: {
+      anthropic: str(obj(parsed.keys).anthropic),
+      openai:    str(obj(parsed.keys).openai),
+      google:    str(obj(parsed.keys).google),
+      mistral:   str(obj(parsed.keys).mistral),
+    },
+    cfg: {
+      name: str(obj(parsed.cfg).name) || 'Você',
+      agent: str(obj(parsed.cfg).agent) || 'PS Claw',
+      sys: str(obj(parsed.cfg).sys),
+      temp: num(obj(parsed.cfg).temp, '0.7'),
+      tok: num(obj(parsed.cfg).tok, '4096'),
+    },
+  };
+  return S;
+}
+let S = loadState();
 
 let curChat  = null;
 let isTyping = false;
 let mFilter  = 'all';
 
-function save(){ localStorage.setItem('psc2', JSON.stringify(S)) }
+function save(){ try { localStorage.setItem('psc2', JSON.stringify(S)); } catch(e){ console.warn('Falha ao salvar estado:', e); } }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────
 function goTab(t){
@@ -1019,24 +1053,28 @@ function goTab(t){
 
 // ─── CHAT ─────────────────────────────────────────────────────────────────
 function newChat(){
+  if (!Array.isArray(S.chats)) S.chats = [];
   const id='c'+Date.now();
   S.chats.unshift({id,title:'Nova conversa',msgs:[],ts:Date.now()});
   save(); selectChat(id); goTab('chat');
 }
 function selectChat(id){
-  curChat=S.chats.find(c=>c.id===id);
+  if (!Array.isArray(S.chats)) S.chats = [];
+  curChat=S.chats.find(c=>c && c.id===id) || null;
   renderChatList(); renderMsgs();
 }
 function deleteChat(id,e){
   e.stopPropagation();
-  S.chats=S.chats.filter(c=>c.id!==id);
+  if (!Array.isArray(S.chats)) S.chats = [];
+  S.chats=S.chats.filter(c=>c && c.id!==id);
   if(curChat?.id===id){curChat=null;renderMsgs();}
   save(); renderChatList();
 }
 function renderChatList(){
+  if (!Array.isArray(S.chats)) S.chats = [];
   document.getElementById('chat-list').innerHTML=S.chats.map(c=>`
-    <div class="ci ${c.id===curChat?.id?'active':''}" onclick="selectChat('${c.id}')">
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${h(c.title)}</span>
+    <div class="ci ${c && c.id===curChat?.id?'active':''}" onclick="selectChat('${c.id}')">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${h(c.title||'Sem título')}</span>
       <button class="ci-del" onclick="deleteChat('${c.id}',event)">✕</button>
     </div>`).join('');
 }
