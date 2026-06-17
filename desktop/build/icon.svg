@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5c4fe0"/>
+      <stop offset="50%" stop-color="#7c6af7"/>
+      <stop offset="100%" stop-color="#9b8fff"/>
+    </linearGradient>
+    <linearGradient id="claw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ededf2"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- rounded background -->
+  <rect x="20" y="20" width="472" height="472" rx="110" ry="110" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- inner highlight -->
+  <rect x="32" y="32" width="448" height="448" rx="100" ry="100" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+  <!-- claw icon (stylized lobster claw) -->
+  <g transform="translate(256 256)" filter="url(#shadow)">
+    <!-- big claw shape -->
+    <path d="M -60,-30
+             C -90,-90 -30,-130 30,-110
+             C 90,-90 110,-30 80,30
+             C 70,50 50,55 30,50
+             L 10,30
+             L -10,50
+             L -30,40
+             L -50,30
+             Z"
+          fill="url(#claw)"/>
+    <!-- pincer detail -->
+    <path d="M 30,-110
+             C 60,-95 80,-65 80,-30
+             C 80,0 60,25 30,30
+             L 40,10
+             L 50,-20
+             L 40,-50
+             L 20,-80
+             Z"
+          fill="rgba(124,106,247,0.4)"/>
+    <!-- eye -->
+    <circle cx="-10" cy="-60" r="6" fill="#1a1a22"/>
+    <circle cx="-8" cy="-62" r="2" fill="#fff"/>
+  </g>
+</svg>

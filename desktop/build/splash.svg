@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0c"/>
+      <stop offset="100%" stop-color="#131318"/>
+    </linearGradient>
+    <linearGradient id="logo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5c4fe0"/>
+      <stop offset="100%" stop-color="#9b8fff"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="320" fill="url(#bg)"/>
+  <circle cx="240" cy="140" r="56" fill="url(#logo)" opacity="0.95"/>
+  <text x="240" y="155" text-anchor="middle" font-size="48" fill="white" font-family="Arial">🦞</text>
+  <text x="240" y="240" text-anchor="middle" font-size="24" fill="#ededf2" font-family="Arial" font-weight="bold">PS Claw</text>
+  <text x="240" y="265" text-anchor="middle" font-size="12" fill="#9494a8" font-family="Arial">Carregando...</text>
+</svg>

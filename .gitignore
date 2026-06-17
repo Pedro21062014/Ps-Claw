@@ -42,3 +42,4 @@ coverage/
 
 # State
 .ps-claw/
+dist-desktop/

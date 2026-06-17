@@ -1,0 +1,145 @@
+{
+  "name": "ps-claw-desktop",
+  "version": "1.2.0",
+  "description": "PS Claw Desktop — AI Agent Gateway with a professional desktop interface. No command line required.",
+  "main": "src/main.js",
+  "author": {
+    "name": "Pedro21062014",
+    "email": "pedro21062014@users.noreply.github.com",
+    "url": "https://github.com/Pedro21062014"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Pedro21062014/Ps-Claw",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pedro21062014/Ps-Claw.git"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "claude",
+    "gpt",
+    "gemini",
+    "electron",
+    "desktop",
+    "ai-gateway",
+    "chatbot"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build:linux": "electron-builder --linux --x64",
+    "build:win": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac --x64",
+    "build:all": "electron-builder --linux --win --x64",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-store": "^10.0.0"
+  },
+  "build": {
+    "appId": "com.pedro21062014.psclaw",
+    "productName": "PS Claw",
+    "copyright": "Copyright © 2025 Pedro21062014",
+    "directories": {
+      "output": "../dist-desktop",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "resources/**/*",
+      "build/icon.png",
+      "build/splash.png",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../web-ui",
+        "to": "web-ui"
+      }
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        },
+        {
+          "target": "tar.gz",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png",
+      "maintainer": "Pedro21062014 <pedro21062014@users.noreply.github.com>",
+      "vendor": "PS Claw",
+      "synopsis": "AI Agent Gateway — Claude, GPT-4, Gemini no mesmo app",
+      "description": "PS Claw é um agente de IA autônomo leve com interface profissional. Multi-provedor (Claude, GPT-4, Gemini, Mistral) com loja de plugins Claw Hub e integração Browser Use."
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1",
+        "libsecret-1-0"
+      ],
+      "category": "Utility"
+    },
+    "appImage": {
+      "artifactName": "PS-Claw-${version}-${arch}.AppImage"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "PS-Claw-${version}-${arch}.${ext}",
+      "publisherName": "Pedro21062014",
+      "verifyUpdateCodeSignature": false,
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PS Claw"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Pedro21062014",
+      "repo": "Ps-Claw"
+    }
+  }
+}
