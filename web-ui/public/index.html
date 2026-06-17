@@ -529,7 +529,7 @@ body{
 #qs-modal{
   background:var(--surface);border:1px solid var(--border2);border-radius:var(--rad);
   padding:32px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;
-  box-shadow:0 24px 80px rgba(0,0,0,.6)
+  box-shadow:0 24px 80px rgba(0,0,0,.6);position:relative
 }
 #qs-modal h2{font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:-.4px}
 #qs-modal .qs-sub{font-size:13px;color:var(--txt2);margin-bottom:24px;line-height:1.6}
@@ -892,8 +892,9 @@ body{
 </div>
 
 <!-- QUICKSTART MODAL (primeiro uso) -->
-<div id="qs-bg">
+<div id="qs-bg" onclick="closeQsBg(event)">
   <div id="qs-modal">
+    <button onclick="closeQs()" style="position:absolute;top:14px;right:14px;background:transparent;border:none;color:var(--txt3);font-size:20px;cursor:pointer;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .15s" onmouseover="this.style.background='var(--surface2)';this.style.color='var(--txt)'" onmouseout="this.style.background='transparent';this.style.color='var(--txt3)'">✕</button>
     <div style="text-align:center;margin-bottom:18px">
       <div style="font-size:48px;margin-bottom:6px">🦞</div>
       <h2>Bem-vindo ao PS Claw!</h2>
@@ -1683,6 +1684,7 @@ async function qsTestKey(){
 }
 function openQs(){ document.getElementById('qs-bg').classList.add('open'); qsSelProv('google'); }
 function closeQs(){ document.getElementById('qs-bg').classList.remove('open'); }
+function closeQsBg(e){ if (e.target === document.getElementById('qs-bg')) closeQs(); }
 function qsFinish(){
   const key = document.getElementById('qs-key').value.trim();
   if (!key) { toast('⚠️ Cole sua API key'); return; }
