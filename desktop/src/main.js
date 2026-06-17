@@ -54,10 +54,15 @@ async function startWebServer() {
   serverPort = await pickPort();
 
   return new Promise((resolve, reject) => {
+    // CRÍTICO: no Electron empacotado, process.execPath é o binário do
+    // Electron (não Node.js). Para rodar um script Node como child process,
+    // precisamos definir ELECTRON_RUN_AS_NODE=1 — isso faz o Electron
+    // esquecer o modo "janela" e rodar como Node puro.
     const env = {
       ...process.env,
       PS_CLAW_WEB_PORT: String(serverPort),
       PS_CLAW_DESKTOP: '1',
+      ELECTRON_RUN_AS_NODE: '1',
     };
 
     serverProcess = spawn(process.execPath, [WEB_UI_PATH], {
@@ -67,9 +72,14 @@ async function startWebServer() {
     });
 
     let bootstrapped = false;
+    let stderrBuf = '';
     const bootstrapTimeout = setTimeout(() => {
       if (!bootstrapped) {
-        reject(new Error('Timeout ao iniciar o servidor web (10s)'));
+        const tail = stderrBuf.slice(-500);
+        reject(new Error(
+          `Timeout ao iniciar o servidor web (10s).\n` +
+          (tail ? `Saída de erro:\n${tail}` : 'Sem saída de erro.')
+        ));
       }
     }, 10000);
 
@@ -85,6 +95,7 @@ async function startWebServer() {
 
     serverProcess.stderr.on('data', (chunk) => {
       const txt = chunk.toString();
+      stderrBuf += txt;
       if (isDev) console.error('[server:err]', txt.trim());
     });
 
@@ -98,7 +109,8 @@ async function startWebServer() {
       if (!isQuitting && code !== 0) {
         dialog.showErrorBox(
           'PS Claw — Erro no servidor',
-          `O servidor web interno encerrou inesperadamente (código ${code}).\n` +
+          `O servidor web interno encerrou inesperadamente (código ${code}).\n\n` +
+          `Saída de erro:\n${stderrBuf.slice(-800) || '(vazia)'}\n\n` +
           `Reinicie o aplicativo.`
         );
       }
