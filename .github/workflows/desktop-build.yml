@@ -1,0 +1,152 @@
+name: Build Desktop App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão para build (ex: 1.2.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: 🐧 Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm install --no-audit --no-fund
+
+      - name: Build Linux
+        working-directory: desktop
+        run: npm run build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: |
+            dist-desktop/*.AppImage
+            dist-desktop/*.deb
+            dist-desktop/*.tar.gz
+
+  build-windows:
+    name: 🪟 Build Windows (NSIS + ZIP)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm install --no-audit --no-fund
+
+      - name: Build Windows (ZIP + NSIS)
+        working-directory: desktop
+        run: npx electron-builder --win --x64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: |
+            dist-desktop/*.zip
+            dist-desktop/*.exe
+
+  build-macos:
+    name: 🍎 Build macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm install --no-audit --no-fund
+
+      - name: Build macOS
+        working-directory: desktop
+        run: npx electron-builder --mac --x64 --arm64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: |
+            dist-desktop/*.dmg
+            dist-desktop/*.zip
+
+  release:
+    name: 📦 Publish Release
+    needs: [build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Generate checksums
+        run: |
+          mkdir -p release
+          find artifacts -type f \( -name "*.AppImage" -o -name "*.deb" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.exe" -o -name "*.dmg" \) -exec cp {} release/ \;
+          cd release
+          sha256sum * > checksums.txt
+          ls -lh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: PS Claw ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'experimental') || contains(github.ref_name, 'beta') }}
+          files: release/*
+          body: |
+            # 🦞 PS Claw ${{ github.ref_name }}
+
+            Download the appropriate file for your platform:
+
+            ## Linux
+            - **AppImage** (portable): `*.AppImage` — `chmod +x` and run
+            - **DEB** (Debian/Ubuntu): `sudo dpkg -i *.deb && sudo apt-get install -f`
+            - **tar.gz** (generic): extract and run
+
+            ## Windows
+            - **Installer** (recommended): `*.exe` — double-click to install
+            - **ZIP** (portable): extract and run `PS Claw.exe`
+
+            ## macOS
+            - **DMG**: mount and drag to Applications
+
+            See `checksums.txt` for SHA256 hashes.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

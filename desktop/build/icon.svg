@@ -1,48 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5c4fe0"/>
+    <!-- Gradiente principal do fundo (estilo app icon moderno) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6d5cf0"/>
       <stop offset="50%" stop-color="#7c6af7"/>
-      <stop offset="100%" stop-color="#9b8fff"/>
+      <stop offset="100%" stop-color="#9b6fff"/>
     </linearGradient>
-    <linearGradient id="claw" x1="0%" y1="0%" x2="0%" y2="100%">
+    <!-- Gradiente de brilho superior -->
+    <linearGradient id="topGloss" x1="50%" y1="0%" x2="50%" y2="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Sombra interna do fundo -->
+    <radialGradient id="innerShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.25"/>
+    </radialGradient>
+    <!-- Gradiente da garra (lobster claw) -->
+    <linearGradient id="clawGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#ededf2"/>
+      <stop offset="50%" stop-color="#f5f3ff"/>
+      <stop offset="100%" stop-color="#d4d0f9"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/>
+    <!-- Sombra projetada pela garra -->
+    <filter id="clawShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.45"/>
     </filter>
+    <!-- Sombra do fundo (elevação) -->
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="22" flood-color="#5c4fe0" flood-opacity="0.55"/>
+    </filter>
+    <!-- Clip path para o formato squircle -->
+    <clipPath id="squircle">
+      <path d="M 256 32
+               C 410 32, 480 102, 480 256
+               C 480 410, 410 480, 256 480
+               C 102 480, 32 410, 32 256
+               C 32 102, 102 32, 256 32 Z"/>
+    </clipPath>
   </defs>
-  <!-- rounded background -->
-  <rect x="20" y="20" width="472" height="472" rx="110" ry="110" fill="url(#bg)" filter="url(#shadow)"/>
-  <!-- inner highlight -->
-  <rect x="32" y="32" width="448" height="448" rx="100" ry="100" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-  <!-- claw icon (stylized lobster claw) -->
-  <g transform="translate(256 256)" filter="url(#shadow)">
-    <!-- big claw shape -->
-    <path d="M -60,-30
-             C -90,-90 -30,-130 30,-110
-             C 90,-90 110,-30 80,30
-             C 70,50 50,55 30,50
-             L 10,30
-             L -10,50
-             L -30,40
-             L -50,30
+
+  <!-- Sombra base (card elevado) -->
+  <path d="M 256 32 C 410 32, 480 102, 480 256 C 480 410, 410 480, 256 480 C 102 480, 32 410, 32 256 C 32 102, 102 32, 256 32 Z"
+        fill="#000" opacity="0.3" filter="url(#cardShadow)"/>
+
+  <!-- Fundo squircle com gradiente -->
+  <path d="M 256 32 C 410 32, 480 102, 480 256 C 480 410, 410 480, 256 480 C 102 480, 32 410, 32 256 C 32 102, 102 32, 256 32 Z"
+        fill="url(#bgGrad)"/>
+
+  <!-- Brilho superior (gloss) -->
+  <path d="M 256 32 C 410 32, 480 102, 480 256 C 480 410, 410 480, 256 480 C 102 480, 32 410, 32 256 C 32 102, 102 32, 256 32 Z"
+        fill="url(#topGloss)"/>
+
+  <!-- Sombra interna (vignette) -->
+  <path d="M 256 32 C 410 32, 480 102, 480 256 C 480 410, 410 480, 256 480 C 102 480, 32 410, 32 256 C 32 102, 102 32, 256 32 Z"
+        fill="url(#innerShadow)"/>
+
+  <!-- Borda sutil interna -->
+  <path d="M 256 32 C 410 32, 480 102, 480 256 C 480 410, 410 480, 256 480 C 102 480, 32 410, 32 256 C 32 102, 102 32, 256 32 Z"
+        fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+
+  <!-- Decoração de fundo: círculos sutis (constelação) -->
+  <g opacity="0.18" clip-path="url(#squircle)">
+    <circle cx="100" cy="120" r="3" fill="#fff"/>
+    <circle cx="400" cy="100" r="2" fill="#fff"/>
+    <circle cx="420" cy="380" r="2.5" fill="#fff"/>
+    <circle cx="90" cy="380" r="2" fill="#fff"/>
+    <circle cx="370" cy="160" r="1.5" fill="#fff"/>
+    <circle cx="140" cy="280" r="1.5" fill="#fff"/>
+  </g>
+
+  <!-- Garra do lagosta estilizada (centrada em 256,256) -->
+  <g transform="translate(256 268)" filter="url(#clawShadow)">
+    <!-- Sombra base da garra (offset para dar profundidade) -->
+    <path d="M -82 -34
+             C -100 -100, -42 -148, 32 -130
+             C 96 -114, 118 -56, 92 24
+             C 82 50, 60 60, 36 56
+             L 16 36
+             L -8 56
+             L -32 46
+             L -54 36
              Z"
-          fill="url(#claw)"/>
-    <!-- pincer detail -->
-    <path d="M 30,-110
-             C 60,-95 80,-65 80,-30
-             C 80,0 60,25 30,30
-             L 40,10
-             L 50,-20
-             L 40,-50
-             L 20,-80
+          fill="#000" opacity="0.25" transform="translate(4 6)"/>
+
+    <!-- Forma principal da garra (branca com gradiente) -->
+    <path d="M -82 -34
+             C -100 -100, -42 -148, 32 -130
+             C 96 -114, 118 -56, 92 24
+             C 82 50, 60 60, 36 56
+             L 16 36
+             L -8 56
+             L -32 46
+             L -54 36
              Z"
-          fill="rgba(124,106,247,0.4)"/>
-    <!-- eye -->
-    <circle cx="-10" cy="-60" r="6" fill="#1a1a22"/>
-    <circle cx="-8" cy="-62" r="2" fill="#fff"/>
+          fill="url(#clawGrad)"/>
+
+    <!-- Detalhe interno da pina (sombra roxa translúcida) -->
+    <path d="M 32 -130
+             C 70 -110, 92 -68, 92 -16
+             C 92 16, 70 42, 36 48
+             L 50 26
+             L 60 -10
+             L 50 -46
+             L 30 -82
+             Z"
+          fill="#7c6af7" opacity="0.32"/>
+
+    <!-- Linha de contorno da pina -->
+    <path d="M 32 -130
+             C 70 -110, 92 -68, 92 -16
+             C 92 16, 70 42, 36 48"
+          fill="none" stroke="#5c4fe0" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+
+    <!-- Detalhes do "dente" da pina -->
+    <path d="M 50 8 L 60 -8 L 56 -22 L 44 -32"
+          fill="none" stroke="#5c4fe0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Olho do lagosta (com brilho) -->
+    <circle cx="-18" cy="-72" r="9" fill="#1a1a22"/>
+    <circle cx="-16" cy="-74" r="3" fill="#fff"/>
+    <circle cx="-19" cy="-71" r="1.5" fill="#fff" opacity="0.7"/>
+
+    <!-- Antena do lagosta (decorativa) -->
+    <path d="M -50 -100 Q -80 -150, -100 -180"
+          fill="none" stroke="url(#clawGrad)" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="-100" cy="-180" r="3" fill="#fff"/>
+
+    <!-- Highlight no topo da garra (brilho) -->
+    <ellipse cx="-10" cy="-110" rx="35" ry="8" fill="#fff" opacity="0.4"/>
+  </g>
+
+  <!-- Pequeno selo "AI" no canto (badge discreto) -->
+  <g transform="translate(384 384)">
+    <circle r="36" fill="#0a0a0c" opacity="0.5"/>
+    <circle r="34" fill="#131318"/>
+    <text x="0" y="5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial" font-size="22" font-weight="700" fill="#9b8fff">AI</text>
   </g>
 </svg>

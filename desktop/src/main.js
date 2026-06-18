@@ -133,8 +133,8 @@ function stopWebServer() {
 // ─── Splash window ────────────────────────────────────────────────────────
 function createSplash() {
   splashWindow = new BrowserWindow({
-    width: 480,
-    height: 320,
+    width: 600,
+    height: 380,
     frame: false,
     transparent: false,
     resizable: false,
@@ -145,13 +145,14 @@ function createSplash() {
     skipTaskbar: true,
     show: false,
     icon: path.join(__dirname, '..', 'build', 'icon.png'),
+    backgroundColor: '#0a0a0c',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
 
-  // splash em HTML embutido
+  // Splash screen profissional em HTML embutido
   const splashHtml = `
     <!DOCTYPE html>
     <html>
@@ -162,39 +163,68 @@ function createSplash() {
       html, body {
         width: 100%; height: 100%; overflow: hidden;
         background: #0a0a0c;
-        background-image: radial-gradient(at 0% 0%, rgba(124,106,247,.08) 0px, transparent 50%),
-                          radial-gradient(at 100% 100%, rgba(58,210,159,.06) 0px, transparent 50%);
+        background-image:
+          radial-gradient(at 0% 0%, rgba(124,106,247,.08) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(58,210,159,.06) 0px, transparent 50%),
+          radial-gradient(at 50% 35%, rgba(124,106,247,.15) 0px, transparent 60%);
         color: #ededf2;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
         user-select: none; -webkit-user-select: none;
+        position: relative;
       }
       .logo {
-        width: 96px; height: 96px; border-radius: 22px;
-        background: linear-gradient(135deg, #5c4fe0 0%, #7c6af7 50%, #9b8fff 100%);
+        width: 124px; height: 124px; border-radius: 28px;
+        background: linear-gradient(135deg, #6d5cf0 0%, #7c6af7 50%, #9b6fff 100%);
         display: flex; align-items: center; justify-content: center;
-        font-size: 50px;
-        box-shadow: 0 12px 40px rgba(124,106,247,.45), inset 0 1px 0 rgba(255,255,255,.2);
-        margin-bottom: 24px;
-        animation: pulse 2s ease-in-out infinite;
+        font-size: 64px;
+        box-shadow: 0 18px 56px rgba(124,106,247,.55),
+                    inset 0 1px 0 rgba(255,255,255,.25),
+                    0 0 0 1px rgba(255,255,255,.08);
+        margin-bottom: 28px;
+        animation: pulse 2.4s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+      }
+      .logo::after {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+        background: linear-gradient(to bottom, rgba(255,255,255,.22), transparent);
+        border-radius: 28px 28px 0 0;
       }
       @keyframes pulse {
-        0%, 100% { transform: scale(1); box-shadow: 0 12px 40px rgba(124,106,247,.45), inset 0 1px 0 rgba(255,255,255,.2); }
-        50% { transform: scale(1.05); box-shadow: 0 16px 50px rgba(124,106,247,.6), inset 0 1px 0 rgba(255,255,255,.3); }
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.04); }
       }
-      h1 { font-size: 22px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 4px; }
-      .sub { font-size: 11px; color: #9494a8; letter-spacing: .5px; }
+      h1 {
+        font-size: 30px; font-weight: 800; letter-spacing: -.6px;
+        background: linear-gradient(135deg, #fff 0%, #9b8fff 100%);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        margin-bottom: 6px;
+      }
+      .sub {
+        font-size: 11px; color: #9494a8; letter-spacing: 2px;
+        text-transform: uppercase; font-weight: 600;
+      }
       .spinner {
-        margin-top: 28px;
-        width: 28px; height: 28px;
-        border: 2.5px solid rgba(255,255,255,.1);
+        margin-top: 32px;
+        width: 32px; height: 32px;
+        border: 3px solid rgba(124,106,247,.15);
         border-top-color: #7c6af7;
         border-radius: 50%;
         animation: spin 0.9s linear infinite;
       }
       @keyframes spin { to { transform: rotate(360deg); } }
-      .ver { position: absolute; bottom: 14px; right: 18px; font-size: 10px; color: #5a5a6e; }
+      .ver {
+        position: absolute; bottom: 16px; right: 20px;
+        font-size: 10px; color: #5a5a6e; letter-spacing: .5px;
+        font-weight: 500;
+      }
+      .brand {
+        position: absolute; bottom: 16px; left: 20px;
+        font-size: 10px; color: #5a5a6e; letter-spacing: .5px;
+      }
     </style>
     </head>
     <body>
@@ -202,6 +232,7 @@ function createSplash() {
       <h1>PS Claw</h1>
       <div class="sub">AI Agent Gateway</div>
       <div class="spinner"></div>
+      <div class="brand">Pedro21062014</div>
       <div class="ver">v${app.getVersion()}</div>
     </body>
     </html>

@@ -106,6 +106,10 @@
         {
           "target": "zip",
           "arch": ["x64"]
+        },
+        {
+          "target": "nsis",
+          "arch": ["x64"]
         }
       ],
       "icon": "build/icon.ico",
@@ -122,9 +126,14 @@
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "installerHeaderIcon": "build/icon.ico",
+      "installerSidebar": "build/installer-sidebar.bmp",
+      "installerHeader": "build/installer-header.bmp",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "PS Claw"
+      "shortcutName": "PS Claw",
+      "license": "../LICENSE",
+      "installerLanguages": ["pt_BR", "en_US"],
+      "differentialPackage": false
     },
     "mac": {
       "target": [

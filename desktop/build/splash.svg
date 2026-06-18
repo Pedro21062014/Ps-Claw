@@ -1,18 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 480 320">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="380" viewBox="0 0 600 380">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0a0a0c"/>
       <stop offset="100%" stop-color="#131318"/>
     </linearGradient>
-    <linearGradient id="logo" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5c4fe0"/>
-      <stop offset="100%" stop-color="#9b8fff"/>
+    <radialGradient id="glow" cx="50%" cy="40%" r="40%">
+      <stop offset="0%" stop-color="#7c6af7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#7c6af7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6d5cf0"/>
+      <stop offset="50%" stop-color="#7c6af7"/>
+      <stop offset="100%" stop-color="#9b6fff"/>
+    </linearGradient>
+    <linearGradient id="claw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d4d0f9"/>
     </linearGradient>
   </defs>
-  <rect width="480" height="320" fill="url(#bg)"/>
-  <circle cx="240" cy="140" r="56" fill="url(#logo)" opacity="0.95"/>
-  <text x="240" y="155" text-anchor="middle" font-size="48" fill="white" font-family="Arial">🦞</text>
-  <text x="240" y="240" text-anchor="middle" font-size="24" fill="#ededf2" font-family="Arial" font-weight="bold">PS Claw</text>
-  <text x="240" y="265" text-anchor="middle" font-size="12" fill="#9494a8" font-family="Arial">Carregando...</text>
+  <rect width="600" height="380" fill="url(#bg)"/>
+  <rect width="600" height="380" fill="url(#glow)"/>
+
+  <!-- Logo: squircle com garra -->
+  <g transform="translate(300 165)">
+    <!-- sombra do card -->
+    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
+          fill="#000" opacity="0.4" transform="translate(2 4)"/>
+    <!-- fundo squircle -->
+    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
+          fill="url(#logoGrad)"/>
+    <!-- gloss -->
+    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
+          fill="#fff" opacity="0.18"/>
+    <!-- garra -->
+    <g transform="scale(0.45) translate(0 20)" filter="url(#clawFilter)">
+      <path d="M -82 -34 C -100 -100, -42 -148, 32 -130 C 96 -114, 118 -56, 92 24 C 82 50, 60 60, 36 56 L 16 36 L -8 56 L -32 46 L -54 36 Z"
+            fill="url(#claw)"/>
+      <path d="M 32 -130 C 70 -110, 92 -68, 92 -16 C 92 16, 70 42, 36 48 L 50 26 L 60 -10 L 50 -46 L 30 -82 Z"
+            fill="#7c6af7" opacity="0.35"/>
+      <circle cx="-18" cy="-72" r="9" fill="#1a1a22"/>
+      <circle cx="-16" cy="-74" r="3" fill="#fff"/>
+    </g>
+  </g>
+
+  <!-- Texto -->
+  <text x="300" y="290" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial" font-size="32" font-weight="800" fill="#ededf2" letter-spacing="-0.5">PS Claw</text>
+  <text x="300" y="318" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial" font-size="12" fill="#9494a8" letter-spacing="1.5">AI AGENT GATEWAY</text>
 </svg>
