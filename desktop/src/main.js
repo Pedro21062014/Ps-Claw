@@ -178,7 +178,6 @@ function createSplash() {
         width: 124px; height: 124px; border-radius: 28px;
         background: linear-gradient(135deg, #6d5cf0 0%, #7c6af7 50%, #9b6fff 100%);
         display: flex; align-items: center; justify-content: center;
-        font-size: 64px;
         box-shadow: 0 18px 56px rgba(124,106,247,.55),
                     inset 0 1px 0 rgba(255,255,255,.25),
                     0 0 0 1px rgba(255,255,255,.08);
@@ -191,7 +190,9 @@ function createSplash() {
         content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
         background: linear-gradient(to bottom, rgba(255,255,255,.22), transparent);
         border-radius: 28px 28px 0 0;
+        pointer-events: none;
       }
+      .logo svg { width: 90%; height: 90%; position: relative; z-index: 1; }
       @keyframes pulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.04); }
@@ -228,7 +229,79 @@ function createSplash() {
     </style>
     </head>
     <body>
-      <div class="logo">🦞</div>
+      <div class="logo">
+        <svg viewBox="-180 -200 360 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ff6b4a"/>
+              <stop offset="50%" stop-color="#e84830"/>
+              <stop offset="100%" stop-color="#b8281c"/>
+            </linearGradient>
+            <linearGradient id="bodyHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffb098" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#ff6b4a" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="clawGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ff8b6a"/>
+              <stop offset="100%" stop-color="#d8401e"/>
+            </linearGradient>
+            <linearGradient id="clawGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#d8401e"/>
+              <stop offset="100%" stop-color="#9a2010"/>
+            </linearGradient>
+            <filter id="ls" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/>
+            </filter>
+          </defs>
+          <g filter="url(#ls)">
+            <!-- Antenas -->
+            <g stroke-linecap="round" fill="none">
+              <path d="M -38 -120 Q -85 -160, -130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+              <path d="M -130 -190 L -150 -198" stroke="url(#bodyGrad)" stroke-width="3"/>
+              <path d="M 38 -120 Q 85 -160, 130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+              <path d="M 130 -190 L 150 -198" stroke="url(#bodyGrad)" stroke-width="3"/>
+            </g>
+            <!-- Garra direita (frente) -->
+            <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 0, 130 25, 100 25 C 80 25, 65 15, 60 0 L 75 -10 L 90 -25 L 80 -40 Z" fill="url(#clawGradDark)"/>
+            <path d="M 100 25 C 80 25, 65 15, 60 0 L 75 -10 L 90 -25 L 100 -10 L 105 5 Z" fill="url(#clawGrad)"/>
+            <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 -15, 140 -5, 125 -5 L 110 -15 L 95 -35 L 80 -45 Z" fill="url(#clawGrad)"/>
+            <path d="M 60 -55 C 90 -85, 130 -78, 138 -38 C 138 -28, 130 -22, 122 -22 L 108 -32 L 92 -50 L 75 -55 Z" fill="url(#bodyHighlight)" opacity="0.7"/>
+            <!-- Garra esquerda (atrás) -->
+            <path d="M -50 -50 C -90 -85, -135 -75, -138 -32 C -140 -10, -125 8, -100 10 C -82 12, -68 4, -62 -8 L -78 -18 L -90 -32 L -80 -45 Z" fill="url(#clawGradDark)"/>
+            <path d="M -60 -55 C -90 -80, -125 -72, -130 -38 L -118 -42 L -100 -50 L -80 -55 Z" fill="url(#bodyHighlight)" opacity="0.5"/>
+            <!-- Cefalotórax -->
+            <ellipse cx="0" cy="-50" rx="55" ry="60" fill="url(#bodyGrad)"/>
+            <ellipse cx="-12" cy="-65" rx="32" ry="38" fill="url(#bodyHighlight)" opacity="0.6"/>
+            <!-- Abdômen segmentado -->
+            <ellipse cx="0" cy="20" rx="48" ry="22" fill="url(#bodyGrad)"/>
+            <ellipse cx="0" cy="50" rx="42" ry="20" fill="url(#bodyGrad)"/>
+            <ellipse cx="0" cy="78" rx="35" ry="17" fill="url(#bodyGrad)"/>
+            <ellipse cx="0" cy="103" rx="28" ry="14" fill="url(#bodyGrad)"/>
+            <!-- Leque caudal -->
+            <path d="M -35 115 L -45 130 L -25 138 L 0 140 L 25 138 L 45 130 L 35 115 Z" fill="url(#clawGradDark)"/>
+            <!-- Olhos -->
+            <line x1="-25" y1="-95" x2="-35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="-37" cy="-110" r="7" fill="#1a1a22"/>
+            <circle cx="-39" cy="-112" r="2.5" fill="#fff"/>
+            <line x1="25" y1="-95" x2="35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="37" cy="-110" r="7" fill="#1a1a22"/>
+            <circle cx="35" cy="-112" r="2.5" fill="#fff"/>
+            <!-- Patas -->
+            <g stroke-linecap="round" fill="none">
+              <path d="M -45 -10 Q -75 0, -95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+              <path d="M -95 25 L -100 45" stroke="url(#bodyGrad)" stroke-width="4"/>
+              <path d="M -48 5 Q -80 18, -100 50" stroke="url(#bodyGrad)" stroke-width="6"/>
+              <path d="M -100 50 L -108 70" stroke="url(#bodyGrad)" stroke-width="4"/>
+              <path d="M 45 -10 Q 75 0, 95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+              <path d="M 95 25 L 100 45" stroke="url(#bodyGrad)" stroke-width="4"/>
+              <path d="M 48 5 Q 80 18, 100 50" stroke="url(#bodyGrad)" stroke-width="6"/>
+              <path d="M 100 50 L 108 70" stroke="url(#bodyGrad)" stroke-width="4"/>
+            </g>
+            <!-- Rostro (bico) -->
+            <path d="M -10 -105 L 0 -118 L 10 -105 Z" fill="url(#clawGradDark)"/>
+          </g>
+        </svg>
+      </div>
       <h1>PS Claw</h1>
       <div class="sub">AI Agent Gateway</div>
       <div class="spinner"></div>

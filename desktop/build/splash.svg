@@ -14,33 +14,99 @@
       <stop offset="50%" stop-color="#7c6af7"/>
       <stop offset="100%" stop-color="#9b6fff"/>
     </linearGradient>
-    <linearGradient id="claw" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#d4d0f9"/>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b4a"/>
+      <stop offset="50%" stop-color="#e84830"/>
+      <stop offset="100%" stop-color="#b8281c"/>
     </linearGradient>
+    <linearGradient id="bodyHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffb098" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ff6b4a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="clawGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff8b6a"/>
+      <stop offset="100%" stop-color="#d8401e"/>
+    </linearGradient>
+    <linearGradient id="clawGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8401e"/>
+      <stop offset="100%" stop-color="#9a2010"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#5c4fe0" flood-opacity="0.6"/>
+    </filter>
+    <filter id="lobsterShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
   </defs>
   <rect width="600" height="380" fill="url(#bg)"/>
   <rect width="600" height="380" fill="url(#glow)"/>
 
-  <!-- Logo: squircle com garra -->
-  <g transform="translate(300 165)">
+  <!-- Logo: squircle com a lagosta vetorial -->
+  <g transform="translate(300 160)">
     <!-- sombra do card -->
-    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
-          fill="#000" opacity="0.4" transform="translate(2 4)"/>
+    <path d="M -70 -70 C -70 -90, -55 -100, 0 -100 C 55 -100, 70 -90, 70 -70 C 70 -50, 70 -30, 70 0 C 70 60, 55 70, 0 70 C -55 70, -70 60, -70 0 Z"
+          fill="#000" opacity="0.4" transform="translate(3 5)" filter="url(#cardShadow)"/>
     <!-- fundo squircle -->
-    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
+    <path d="M -70 -70 C -70 -90, -55 -100, 0 -100 C 55 -100, 70 -90, 70 -70 C 70 -50, 70 -30, 70 0 C 70 60, 55 70, 0 70 C -55 70, -70 60, -70 0 Z"
           fill="url(#logoGrad)"/>
     <!-- gloss -->
-    <path d="M -60 -60 C -60 -75, -50 -85, 0 -85 C 50 -85, 60 -75, 60 -60 C 60 -45, 60 -30, 60 0 C 60 50, 50 60, 0 60 C -50 60, -60 50, -60 0 Z"
+    <path d="M -70 -70 C -70 -90, -55 -100, 0 -100 C 55 -100, 70 -90, 70 -70 C 70 -50, 70 -30, 70 0 C 70 60, 55 70, 0 70 C -55 70, -70 60, -70 0 Z"
           fill="#fff" opacity="0.18"/>
-    <!-- garra -->
-    <g transform="scale(0.45) translate(0 20)" filter="url(#clawFilter)">
-      <path d="M -82 -34 C -100 -100, -42 -148, 32 -130 C 96 -114, 118 -56, 92 24 C 82 50, 60 60, 36 56 L 16 36 L -8 56 L -32 46 L -54 36 Z"
-            fill="url(#claw)"/>
-      <path d="M 32 -130 C 70 -110, 92 -68, 92 -16 C 92 16, 70 42, 36 48 L 50 26 L 60 -10 L 50 -46 L 30 -82 Z"
-            fill="#7c6af7" opacity="0.35"/>
-      <circle cx="-18" cy="-72" r="9" fill="#1a1a22"/>
-      <circle cx="-16" cy="-74" r="3" fill="#fff"/>
+
+    <!-- Lagosta escalada -->
+    <g transform="scale(0.45) translate(0 18)" filter="url(#lobsterShadow)">
+      <!-- Antenas -->
+      <g stroke-linecap="round" fill="none">
+        <path d="M -38 -120 Q -85 -160, -130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+        <path d="M -130 -190 L -150 -198" stroke="url(#bodyGrad)" stroke-width="3"/>
+        <path d="M 38 -120 Q 85 -160, 130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+        <path d="M 130 -190 L 150 -198" stroke="url(#bodyGrad)" stroke-width="3"/>
+      </g>
+      <!-- Garra direita -->
+      <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 0, 130 25, 100 25 C 80 25, 65 15, 60 0 L 75 -10 L 90 -25 L 80 -40 Z"
+            fill="url(#clawGradDark)"/>
+      <path d="M 100 25 C 80 25, 65 15, 60 0 L 75 -10 L 90 -25 L 100 -10 L 105 5 Z"
+            fill="url(#clawGrad)"/>
+      <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 -15, 140 -5, 125 -5 L 110 -15 L 95 -35 L 80 -45 Z"
+            fill="url(#clawGrad)"/>
+      <path d="M 60 -55 C 90 -85, 130 -78, 138 -38 C 138 -28, 130 -22, 122 -22 L 108 -32 L 92 -50 L 75 -55 Z"
+            fill="url(#bodyHighlight)" opacity="0.7"/>
+      <!-- Garra esquerda -->
+      <path d="M -50 -50 C -90 -85, -135 -75, -138 -32 C -140 -10, -125 8, -100 10 C -82 12, -68 4, -62 -8 L -78 -18 L -90 -32 L -80 -45 Z"
+            fill="url(#clawGradDark)"/>
+      <path d="M -60 -55 C -90 -80, -125 -72, -130 -38 L -118 -42 L -100 -50 L -80 -55 Z"
+            fill="url(#bodyHighlight)" opacity="0.5"/>
+      <!-- Cefalotórax -->
+      <ellipse cx="0" cy="-50" rx="55" ry="60" fill="url(#bodyGrad)"/>
+      <ellipse cx="-12" cy="-65" rx="32" ry="38" fill="url(#bodyHighlight)" opacity="0.6"/>
+      <!-- Abdômen segmentado -->
+      <ellipse cx="0" cy="20" rx="48" ry="22" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="50" rx="42" ry="20" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="78" rx="35" ry="17" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="103" rx="28" ry="14" fill="url(#bodyGrad)"/>
+      <!-- Leque caudal -->
+      <path d="M -35 115 L -45 130 L -25 138 L 0 140 L 25 138 L 45 130 L 35 115 Z"
+            fill="url(#clawGradDark)"/>
+      <!-- Olhos -->
+      <line x1="-25" y1="-95" x2="-35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="-37" cy="-110" r="7" fill="#1a1a22"/>
+      <circle cx="-39" cy="-112" r="2.5" fill="#fff"/>
+      <line x1="25" y1="-95" x2="35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="37" cy="-110" r="7" fill="#1a1a22"/>
+      <circle cx="35" cy="-112" r="2.5" fill="#fff"/>
+      <!-- Patas -->
+      <g stroke-linecap="round" fill="none">
+        <path d="M -45 -10 Q -75 0, -95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+        <path d="M -95 25 L -100 45" stroke="url(#bodyGrad)" stroke-width="4"/>
+        <path d="M -48 5 Q -80 18, -100 50" stroke="url(#bodyGrad)" stroke-width="6"/>
+        <path d="M -100 50 L -108 70" stroke="url(#bodyGrad)" stroke-width="4"/>
+        <path d="M 45 -10 Q 75 0, 95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+        <path d="M 95 25 L 100 45" stroke="url(#bodyGrad)" stroke-width="4"/>
+        <path d="M 48 5 Q 80 18, 100 50" stroke="url(#bodyGrad)" stroke-width="6"/>
+        <path d="M 100 50 L 108 70" stroke="url(#bodyGrad)" stroke-width="4"/>
+      </g>
+      <!-- Rostro -->
+      <path d="M -10 -105 L 0 -118 L 10 -105 Z" fill="url(#clawGradDark)"/>
     </g>
   </g>
 

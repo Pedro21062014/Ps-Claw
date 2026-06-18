@@ -5,27 +5,63 @@
       <stop offset="0%" stop-color="#7c6af7"/>
       <stop offset="100%" stop-color="#5c4fe0"/>
     </linearGradient>
-    <linearGradient id="claw" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#e0dcfa"/>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b4a"/>
+      <stop offset="50%" stop-color="#e84830"/>
+      <stop offset="100%" stop-color="#b8281c"/>
     </linearGradient>
+    <linearGradient id="bodyHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffb098" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ff6b4a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="clawGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff8b6a"/>
+      <stop offset="100%" stop-color="#d8401e"/>
+    </linearGradient>
+    <linearGradient id="clawGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8401e"/>
+      <stop offset="100%" stop-color="#9a2010"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
   </defs>
   <rect width="164" height="314" fill="url(#bg)"/>
   <rect width="164" height="314" fill="#fff" opacity="0.08"/>
 
-  <!-- Logo -->
+  <!-- Logo: squircle com a lagosta -->
   <g transform="translate(82 130)">
     <path d="M -42 -42 C -42 -54, -34 -60, 0 -60 C 34 -60, 42 -54, 42 -42 C 42 -30, 42 -20, 42 0 C 42 35, 34 42, 0 42 C -34 42, -42 35, -42 0 Z"
           fill="#fff" opacity="0.15"/>
-    <g transform="scale(0.32) translate(0 14)">
-      <path d="M -82 -34 C -100 -100, -42 -148, 32 -130 C 96 -114, 118 -56, 92 24 C 82 50, 60 60, 36 56 L 16 36 L -8 56 L -32 46 L -54 36 Z"
-            fill="url(#claw)"/>
-      <circle cx="-18" cy="-72" r="9" fill="#1a1a22"/>
-      <circle cx="-16" cy="-74" r="3" fill="#fff"/>
+    <g transform="scale(0.32) translate(0 14)" filter="url(#shadow)">
+      <g stroke-linecap="round" fill="none">
+        <path d="M -38 -120 Q -85 -160, -130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+        <path d="M 38 -120 Q 85 -160, 130 -190" stroke="url(#bodyGrad)" stroke-width="5"/>
+      </g>
+      <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 0, 130 25, 100 25 C 80 25, 65 15, 60 0 L 75 -10 L 90 -25 L 80 -40 Z" fill="url(#clawGradDark)"/>
+      <path d="M 50 -50 C 90 -90, 140 -80, 145 -30 C 148 -15, 140 -5, 125 -5 L 110 -15 L 95 -35 L 80 -45 Z" fill="url(#clawGrad)"/>
+      <path d="M -50 -50 C -90 -85, -135 -75, -138 -32 C -140 -10, -125 8, -100 10 C -82 12, -68 4, -62 -8 L -78 -18 L -90 -32 L -80 -45 Z" fill="url(#clawGradDark)"/>
+      <ellipse cx="0" cy="-50" rx="55" ry="60" fill="url(#bodyGrad)"/>
+      <ellipse cx="-12" cy="-65" rx="32" ry="38" fill="url(#bodyHighlight)" opacity="0.6"/>
+      <ellipse cx="0" cy="20" rx="48" ry="22" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="50" rx="42" ry="20" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="78" rx="35" ry="17" fill="url(#bodyGrad)"/>
+      <ellipse cx="0" cy="103" rx="28" ry="14" fill="url(#bodyGrad)"/>
+      <path d="M -35 115 L -45 130 L -25 138 L 0 140 L 25 138 L 45 130 L 35 115 Z" fill="url(#clawGradDark)"/>
+      <line x1="-25" y1="-95" x2="-35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="-37" cy="-110" r="7" fill="#1a1a22"/>
+      <circle cx="-39" cy="-112" r="2.5" fill="#fff"/>
+      <line x1="25" y1="-95" x2="35" y2="-108" stroke="url(#bodyGrad)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="37" cy="-110" r="7" fill="#1a1a22"/>
+      <circle cx="35" cy="-112" r="2.5" fill="#fff"/>
+      <g stroke-linecap="round" fill="none">
+        <path d="M -45 -10 Q -75 0, -95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+        <path d="M 45 -10 Q 75 0, 95 25" stroke="url(#bodyGrad)" stroke-width="6"/>
+      </g>
+      <path d="M -10 -105 L 0 -118 L 10 -105 Z" fill="url(#clawGradDark)"/>
     </g>
   </g>
 
-  <!-- Texto -->
   <text x="82" y="220" text-anchor="middle" font-family="Arial" font-size="24" font-weight="800" fill="#fff">PS Claw</text>
   <text x="82" y="244" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" opacity="0.85" letter-spacing="1">AI AGENT GATEWAY</text>
   <text x="82" y="280" text-anchor="middle" font-family="Arial" font-size="9" fill="#fff" opacity="0.6">v1.2.0</text>
